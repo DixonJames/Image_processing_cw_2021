@@ -1,0 +1,22 @@
+1)
+window:
+    A) have 2 lines of same gradient with slightly differing y intercepts. put image on the 'graph' and for ech row of
+        the image find the pixel that best matches where the line would go though on the graph
+    B) for each row between these lines have a full intensity of given overlay. respectively to the R/L of each of
+        the R/L most lines have a Gaussian distribution drop off that gradually reduces the intensity of the overlay
+    C) where the overlay is present, for each RGB channel will take a proportion of each depending on parameters
+        input into filter (and also depending on the Gaussian distribution on the edges)
+
+    D) also, as we should have another light dispersion dependant on the height of the light. should have most intense mean
+        roughly in the center and have each row getting away from the get darker. probably use a larger sigma than use
+        laterally as should only really just be noticeable (look at DUO examples for reference when fine tuning.)
+
+        
+rainbow:
+    main difference to regular light here is the spectrum of colours.
+    instead of having natural light colour across every row, will instead run though the spectrum along the row.
+    will run though a function that will take an input of the length of pixels it has to go though the spectrum in
+
+2)
+3)
+4)
