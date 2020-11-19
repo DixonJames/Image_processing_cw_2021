@@ -11,7 +11,7 @@ window:
         roughly in the center and have each row getting away from the get darker. probably use a larger sigma than use
         laterally as should only really just be noticeable (look at DUO examples for reference when fine tuning.)
 
-        
+
 rainbow:
     main difference to regular light here is the spectrum of colours.
     instead of having natural light colour across every row, will instead run though the spectrum along the row.

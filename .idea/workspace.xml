@@ -27,6 +27,11 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\GIT\Data science\image processing\Image processing coursework" />
+    </key>
+  </component>
   <component name="RunManager" selected="Python.Q1">
     <configuration name="Q1" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Image processing coursework" />
@@ -100,9 +105,61 @@
       <screen x="0" y="0" width="1536" height="834" />
     </state>
     <state x="538" y="219" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1536.834/-1920.0.1920.1080@0.0.1536.834" timestamp="1605813603782" />
+    <state x="524" y="120" key="#xdebugger.evaluate" timestamp="1605817454470">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state x="524" y="120" key="#xdebugger.evaluate/0.0.1536.834/-1920.0.1920.1080@0.0.1536.834" timestamp="1605817454470" />
+    <state width="1515" height="265" key="GridCell.Tab.0.bottom" timestamp="1605817460786">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state width="1515" height="265" key="GridCell.Tab.0.bottom/0.0.1536.834/-1920.0.1920.1080@0.0.1536.834" timestamp="1605817460786" />
+    <state width="1515" height="265" key="GridCell.Tab.0.center" timestamp="1605817460786">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state width="1515" height="265" key="GridCell.Tab.0.center/0.0.1536.834/-1920.0.1920.1080@0.0.1536.834" timestamp="1605817460786" />
+    <state width="1515" height="265" key="GridCell.Tab.0.left" timestamp="1605817460786">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state width="1515" height="265" key="GridCell.Tab.0.left/0.0.1536.834/-1920.0.1920.1080@0.0.1536.834" timestamp="1605817460786" />
+    <state width="1515" height="265" key="GridCell.Tab.0.right" timestamp="1605817460786">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state width="1515" height="265" key="GridCell.Tab.0.right/0.0.1536.834/-1920.0.1920.1080@0.0.1536.834" timestamp="1605817460786" />
+    <state width="1515" height="265" key="GridCell.Tab.1.bottom" timestamp="1605817461508">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state width="1515" height="265" key="GridCell.Tab.1.bottom/0.0.1536.834/-1920.0.1920.1080@0.0.1536.834" timestamp="1605817461508" />
+    <state width="1515" height="265" key="GridCell.Tab.1.center" timestamp="1605817461507">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state width="1515" height="265" key="GridCell.Tab.1.center/0.0.1536.834/-1920.0.1920.1080@0.0.1536.834" timestamp="1605817461507" />
+    <state width="1515" height="265" key="GridCell.Tab.1.left" timestamp="1605817461507">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state width="1515" height="265" key="GridCell.Tab.1.left/0.0.1536.834/-1920.0.1920.1080@0.0.1536.834" timestamp="1605817461507" />
+    <state width="1515" height="265" key="GridCell.Tab.1.right" timestamp="1605817461508">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state width="1515" height="265" key="GridCell.Tab.1.right/0.0.1536.834/-1920.0.1920.1080@0.0.1536.834" timestamp="1605817461508" />
     <state x="277" y="62" key="SettingsEditor" timestamp="1605813573860">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
     <state x="277" y="62" key="SettingsEditor/0.0.1536.834/-1920.0.1920.1080@0.0.1536.834" timestamp="1605813573860" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Q1.py</url>
+          <line>41</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Q1.py</url>
+          <line>39</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
