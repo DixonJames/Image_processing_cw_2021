@@ -12,6 +12,13 @@ window:
         laterally as should only really just be noticeable (look at DUO examples for reference when fine tuning.)
 
 
+    other idea:
+    A) have 3 parts, original I with some basic brighness adjustemnt, original with a single wide intenisy point spread though
+       with gausian dropoff (large sigme here), and a mask (that mimics the gap sun comes though) that will tell where
+       part 2 overrules part one. part three will have a gausain drop off on the edges as well
+    B) create all three parts (mask will still use the line gen and soft edges from idea 1), and apply the brightened part
+        over the darkened part only where the findow frame masks describes
+
 rainbow:
     main difference to regular light here is the spectrum of colours.
     instead of having natural light colour across every row, will instead run though the spectrum along the row.
