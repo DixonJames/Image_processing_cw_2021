@@ -155,6 +155,30 @@ def colourWall(image, colour):
                                 colour[2]]
     return canvas
 
+class spectrum:
+    def __init__(self):
+        self.palet = []
+
+    def hexRGB(self, hex_num):
+        size = len(hex_num)
+        return tuple(int(hex_num[i:i + size // 3], 16) for i in range(0, size, size // 3))
+
+    def allCols(self, start, finish, step):
+        gradient = []
+        col = start
+        while col < finish:
+            hex_col = hex(col).split('x')[1]
+            RGBval = self.hexRGB("0" * (6 - len(hex_col)) + hex_col)
+            RBGval = (RGBval[0], RGBval[2], RGBval[1])
+            gradient.append(RBGval)
+
+            col += step
+
+        return gradient
+
+    def createRainbow(self, width):
+        step = round(16777215 / width)
+        return spectrum(0, 16777215, step)
 
 if __name__ == '__main__':
     #open face image
