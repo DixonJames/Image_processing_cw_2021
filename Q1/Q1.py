@@ -20,6 +20,37 @@ def gaussianDegradation(number_Points, sigma):
 
     return out
 
+def medianFilter(image, dimension):
+    canvas = image.copy()
+    if dimension % 2 != 1:
+        dimension += 1
+
+
+    for x in range(dimension):
+        for y in range(dimension):
+            workspace = []
+            top_left_x = x - (dimension - 1)/2
+            top_left_y = y + (dimension - 1)/2
+            for p_y in range(dimension):
+                for p_x in range(dimension):
+                    current_x = int(top_left_x + p_x)
+                    current_y = int(top_left_y - p_y)
+                    try:
+                        selected_pix = image[current_y][current_x][0:3]
+                        if current_x >= 0 and current_y >= 0 and current_x <= dimension and current_y <= dimension:
+                            workspace.append(selected_pix)
+                    except:
+                        continue
+            pixels_in_filter = len(workspace)
+
+            mean_pix = 0
+            for pixel in workspace:
+                mean_pix += pixel[0] / pixels_in_filter
+
+            canvas[y][x] = mean_pix
+
+        return canvas
+
 def genLines(image):
     y_dim = len(image)
     x_dim = len(image[0])
@@ -140,6 +171,7 @@ if __name__ == '__main__':
     grad, intercept_L, intercept_R = genLines(face_image)
     row_points = borderPixels(face_image, grad, intercept_L, intercept_R)
     win_mask = genWindowMask(face_image, row_points, 50, 100)
+    win_mask = medianFilter(win_mask, 9)
 
     #create sun mask
     sun_mask = genSunMask(face_image, 100)

@@ -28,11 +28,11 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\GIT\Data science\image processing\Image processing coursework" />
-      <recent name="C:\GIT\Data science\image processing\Image processing coursework\Q1" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\GIT\Data science\image processing\Image processing coursework" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\GIT\Data science\image processing\Image processing coursework\Q1" />
       <recent name="C:\GIT\Data science\image processing\Image processing coursework" />
     </key>
   </component>
@@ -100,14 +100,60 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="testzone (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Image processing coursework" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Q1" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Q1/testzone.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="testzone" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Image processing coursework" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="C:\GIT\Data science\image processing\Image processing coursework\Q1\testzone.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Python.Unnamed" />
-      <item itemvalue="Python.Q1" />
       <item itemvalue="Python.Q1 (1)" />
+      <item itemvalue="Python.Q1" />
+      <item itemvalue="Python.testzone" />
+      <item itemvalue="Python.testzone (1)" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.Q1 (1)" />
+        <item itemvalue="Python.testzone (1)" />
+        <item itemvalue="Python.testzone" />
         <item itemvalue="Python.Q1" />
       </list>
     </recent_temporary>
@@ -132,46 +178,46 @@
       <screen x="0" y="0" width="1536" height="834" />
     </state>
     <state x="538" y="219" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1536.834/-1920.0.1920.1080@0.0.1536.834" timestamp="1605813603782" />
-    <state x="499" y="164" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1605973334770">
+    <state x="499" y="164" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1606252601474">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state x="499" y="164" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1536.834/-1920.0.1920.1080@0.0.1536.834" timestamp="1605973334770" />
-    <state x="-1163" y="133" width="867" height="591" key="#xdebugger.evaluate" timestamp="1605977231442">
+    <state x="499" y="164" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1536.834/-1920.0.1920.1080@0.0.1536.834" timestamp="1606252601474" />
+    <state x="-1163" y="133" width="867" height="591" key="#xdebugger.evaluate" timestamp="1606252522026">
       <screen x="-1920" y="0" width="1920" height="1080" />
     </state>
-    <state x="-1163" y="133" width="867" height="591" key="#xdebugger.evaluate/0.0.1536.834/-1920.0.1920.1080@0.0.1536.834" timestamp="1605977231442" />
-    <state width="1515" height="176" key="GridCell.Tab.0.bottom" timestamp="1605977978532">
+    <state x="-1163" y="133" width="867" height="591" key="#xdebugger.evaluate/0.0.1536.834/-1920.0.1920.1080@0.0.1536.834" timestamp="1606252522026" />
+    <state width="1515" height="176" key="GridCell.Tab.0.bottom" timestamp="1606252790216">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1515" height="176" key="GridCell.Tab.0.bottom/0.0.1536.834/-1920.0.1920.1080@0.0.1536.834" timestamp="1605977978532" />
-    <state width="1515" height="176" key="GridCell.Tab.0.center" timestamp="1605977978532">
+    <state width="1515" height="176" key="GridCell.Tab.0.bottom/0.0.1536.834/-1920.0.1920.1080@0.0.1536.834" timestamp="1606252790216" />
+    <state width="1515" height="176" key="GridCell.Tab.0.center" timestamp="1606252790216">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1515" height="176" key="GridCell.Tab.0.center/0.0.1536.834/-1920.0.1920.1080@0.0.1536.834" timestamp="1605977978532" />
-    <state width="1515" height="176" key="GridCell.Tab.0.left" timestamp="1605977978532">
+    <state width="1515" height="176" key="GridCell.Tab.0.center/0.0.1536.834/-1920.0.1920.1080@0.0.1536.834" timestamp="1606252790216" />
+    <state width="1515" height="176" key="GridCell.Tab.0.left" timestamp="1606252790216">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1515" height="176" key="GridCell.Tab.0.left/0.0.1536.834/-1920.0.1920.1080@0.0.1536.834" timestamp="1605977978532" />
-    <state width="1515" height="176" key="GridCell.Tab.0.right" timestamp="1605977978532">
+    <state width="1515" height="176" key="GridCell.Tab.0.left/0.0.1536.834/-1920.0.1920.1080@0.0.1536.834" timestamp="1606252790216" />
+    <state width="1515" height="176" key="GridCell.Tab.0.right" timestamp="1606252790216">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1515" height="176" key="GridCell.Tab.0.right/0.0.1536.834/-1920.0.1920.1080@0.0.1536.834" timestamp="1605977978532" />
-    <state width="1515" height="176" key="GridCell.Tab.1.bottom" timestamp="1605977241024">
+    <state width="1515" height="176" key="GridCell.Tab.0.right/0.0.1536.834/-1920.0.1920.1080@0.0.1536.834" timestamp="1606252790216" />
+    <state width="1515" height="130" key="GridCell.Tab.1.bottom" timestamp="1606252596077">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1515" height="176" key="GridCell.Tab.1.bottom/0.0.1536.834/-1920.0.1920.1080@0.0.1536.834" timestamp="1605977241024" />
-    <state width="1515" height="176" key="GridCell.Tab.1.center" timestamp="1605977241024">
+    <state width="1515" height="130" key="GridCell.Tab.1.bottom/0.0.1536.834/-1920.0.1920.1080@0.0.1536.834" timestamp="1606252596077" />
+    <state width="1515" height="130" key="GridCell.Tab.1.center" timestamp="1606252596077">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1515" height="176" key="GridCell.Tab.1.center/0.0.1536.834/-1920.0.1920.1080@0.0.1536.834" timestamp="1605977241024" />
-    <state width="1515" height="176" key="GridCell.Tab.1.left" timestamp="1605977241024">
+    <state width="1515" height="130" key="GridCell.Tab.1.center/0.0.1536.834/-1920.0.1920.1080@0.0.1536.834" timestamp="1606252596077" />
+    <state width="1515" height="130" key="GridCell.Tab.1.left" timestamp="1606252596077">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1515" height="176" key="GridCell.Tab.1.left/0.0.1536.834/-1920.0.1920.1080@0.0.1536.834" timestamp="1605977241024" />
-    <state width="1515" height="176" key="GridCell.Tab.1.right" timestamp="1605977241024">
+    <state width="1515" height="130" key="GridCell.Tab.1.left/0.0.1536.834/-1920.0.1920.1080@0.0.1536.834" timestamp="1606252596077" />
+    <state width="1515" height="130" key="GridCell.Tab.1.right" timestamp="1606252596077">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1515" height="176" key="GridCell.Tab.1.right/0.0.1536.834/-1920.0.1920.1080@0.0.1536.834" timestamp="1605977241024" />
+    <state width="1515" height="130" key="GridCell.Tab.1.right/0.0.1536.834/-1920.0.1920.1080@0.0.1536.834" timestamp="1606252596077" />
     <state x="277" y="62" key="SettingsEditor" timestamp="1605813573860">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
@@ -186,8 +232,13 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Q1/Q1.py</url>
-          <line>99</line>
+          <line>130</line>
           <option name="timeStamp" value="42" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Q1/testzone.py</url>
+          <line>31</line>
+          <option name="timeStamp" value="52" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
