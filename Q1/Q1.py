@@ -1,6 +1,8 @@
 import cv2
 import numpy as np
 import math
+import random
+import turtle
 
 natural_light = [253, 198, 243]
 
@@ -157,28 +159,72 @@ def colourWall(image, colour):
 
 class spectrum:
     def __init__(self):
-        self.palet = []
+        self.max_range = 256*6*2
 
     def hexRGB(self, hex_num):
         size = len(hex_num)
         return tuple(int(hex_num[i:i + size // 3], 16) for i in range(0, size, size // 3))
 
-    def allCols(self, start, finish, step):
+    def HSVgradient(self, width, saturation):
+        base_col_val = 254 - round(saturation * 254)
+        #BGR
         gradient = []
-        col = start
-        while col < finish:
-            hex_col = hex(col).split('x')[1]
-            RGBval = self.hexRGB("0" * (6 - len(hex_col)) + hex_col)
-            RBGval = (RGBval[0], RGBval[2], RGBval[1])
-            gradient.append(RBGval)
 
-            col += step
+        for i in range(base_col_val, 254):
+            for j in range(2):
+                gradient.append([base_col_val, i, 255])
 
-        return gradient
+        for i in range(base_col_val, 254):
+            for j in range(2):
+                gradient.append([base_col_val, 255, 255 - i])
+
+        for i in range(base_col_val, 254):
+            for j in range(2):
+                gradient.append([i, 255, base_col_val])
+
+        for i in range(base_col_val, 254):
+            for j in range(2):
+                gradient.append([255 , 255 - i, base_col_val])
+
+        for i in range(base_col_val, 254):
+            for j in range(2):
+                gradient.append([255, base_col_val, i])
+
+        for i in range(base_col_val, 254):
+            for j in range(2):
+                gradient.append([255, base_col_val, 255])
+
+        stepsize = round(len(gradient) / width)
+        sized_grad = []
+        for i in range(0, len(gradient), stepsize):
+            sized_grad.append(gradient[i])
+
+        return sized_grad
+
 
     def createRainbow(self, width):
-        step = round(16777215 / width)
-        return spectrum(0, 16777215, step)
+        fitted_gradient = self.HSVgradient(width, 1)
+
+        sizediff = width - len(fitted_gradient)
+
+        if sizediff < 0:
+            for i in range(abs(sizediff)):
+                fitted_gradient.pop()
+        elif sizediff > 0:
+            for i in  range(sizediff):
+                val = random.randint(1, len(fitted_gradient) -1)
+                fitted_gradient.insert(val + 1, fitted_gradient[val])
+
+
+        return fitted_gradient
+
+    def rainbowRoad(self, image):
+        canvas = image.copy()
+        row = self.createRainbow(image.shape[0])
+        for y in range(len(image)):
+            canvas[y] = row
+        return canvas
+
 
 if __name__ == '__main__':
     #open face image
@@ -190,6 +236,10 @@ if __name__ == '__main__':
     dark_face = altGamma(face_image, 0.3)
     #lightened face
     light_face = altGamma(face_image, 1.5)
+    #rinbow pic
+
+    rinbow_gradient = spectrum().rainbowRoad(face_image)
+    cv2.imwrite("rainbow_test.jpg", rinbow_gradient)
 
     #generate window mask
     grad, intercept_L, intercept_R = genLines(face_image)
