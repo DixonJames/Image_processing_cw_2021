@@ -8,6 +8,11 @@ natural_light = [253, 198, 243]
 
 def lenHype(a, b):
     return math.sqrt(a**2 + b**2)
+def set_seq(number_needed, num_range):
+    sequence = []
+    for i in range(number_needed):
+        sequence.append(hash(i*(math.pi))%num_range)
+    return sequence
 
 def gausianDistibution(x, sigma):
     return (1/(sigma*math.sqrt(2*math.pi)))*math.e**(-((x**2)/(2*(sigma**2))))
@@ -73,7 +78,6 @@ def borderPixels(image, grad, intercept_L, intercept_R):
     for rowNum in range(len(image)):
         row_points.append(((rowNum, int(round((rowNum - intercept_L)/grad))), (rowNum, int(round((rowNum - intercept_R) / grad)))))
     return row_points
-
 
 def genWindowMask(image, row_points, blur_size, blur_drop):
     dropoff = gaussianDegradation(blur_size, blur_drop)
@@ -171,28 +175,31 @@ class spectrum:
         gradient = []
 
         for i in range(base_col_val, 254):
-            for j in range(2):
+            for j in range(1):
                 gradient.append([base_col_val, i, 255])
 
         for i in range(base_col_val, 254):
-            for j in range(2):
-                gradient.append([base_col_val, 255, 255 - i])
+            for j in range(1):
+                gradient.append([base_col_val, 255, 255 - (i - base_col_val)])
 
         for i in range(base_col_val, 254):
-            for j in range(2):
+            for j in range(1):
                 gradient.append([i, 255, base_col_val])
 
         for i in range(base_col_val, 254):
-            for j in range(2):
-                gradient.append([255 , 255 - i, base_col_val])
+            for j in range(1):
+                gradient.append([255 , 255 - (i - base_col_val), base_col_val])
 
         for i in range(base_col_val, 254):
-            for j in range(2):
+            for j in range(1):
                 gradient.append([255, base_col_val, i])
 
+        """
+        #horrible pink bit that didn't realy look any good
         for i in range(base_col_val, 254):
             for j in range(2):
                 gradient.append([255, base_col_val, 255])
+        """
 
         stepsize = round(len(gradient) / width)
         sized_grad = []
@@ -203,16 +210,21 @@ class spectrum:
 
 
     def createRainbow(self, width):
-        fitted_gradient = self.HSVgradient(width, 1)
+        fitted_gradient = self.HSVgradient(width, 0.5)
 
         sizediff = width - len(fitted_gradient)
+        repalce_list = set_seq(sizediff, width)
 
         if sizediff < 0:
             for i in range(abs(sizediff)):
                 fitted_gradient.pop()
         elif sizediff > 0:
             for i in  range(sizediff):
-                val = random.randint(1, len(fitted_gradient) -1)
+                val = repalce_list[i]
+                if val >= len(fitted_gradient)-1:
+                    val = len(fitted_gradient) -1
+                if val <= 0:
+                    val = 1
                 fitted_gradient.insert(val + 1, fitted_gradient[val])
 
 
@@ -246,6 +258,9 @@ if __name__ == '__main__':
     row_points = borderPixels(face_image, grad, intercept_L, intercept_R)
     win_mask = genWindowMask(face_image, row_points, 50, 100)
     win_mask = medianFilter(win_mask, 9)
+
+    #'rinbow_window = genWindowMask(face_image, row_points, 50, 100, True)
+    #cv2.imwrite("rinbow_window.jpg", rinbow_window)
 
     #create sun mask
     sun_mask = genSunMask(face_image, 100)
