@@ -90,19 +90,20 @@ def genWindowMask(image, row_points, blur_size, blur_drop):
             if row_points[row_num][1][1] <= collumb_num  and collumb_num <= row_points[row_num][0][1]:
                 mask[row_num][collumb_num] = 1
 
-                if collumb_num == row_points[row_num][0][1]:
-                    for i in range(len(dropoff)-1):
-                        try:
-                            mask[row_num][collumb_num + i] = dropoff[i]
-                        except:
-                            continue
+                if blur_size != 0 and blur_drop != 0:
+                    if collumb_num == row_points[row_num][0][1]:
+                        for i in range(len(dropoff)-1):
+                            try:
+                                mask[row_num][collumb_num + i] = dropoff[i]
+                            except:
+                                continue
 
-                elif collumb_num == row_points[row_num][1][1]:
-                    for i in range(len(dropoff)-1):
-                        try:
-                            mask[row_num][collumb_num - i] = dropoff[i]
-                        except:
-                            continue
+                    elif collumb_num == row_points[row_num][1][1]:
+                        for i in range(len(dropoff)-1):
+                            try:
+                                mask[row_num][collumb_num - i] = dropoff[i]
+                            except:
+                                continue
     #mask = np.array(mask)
     return mask
 
@@ -180,6 +181,9 @@ def colourWall(image, colour):
                                 colour[1],
                                 colour[2]]
     return canvas
+def allOnesMask(image):
+    rows, cols, dims = image.shape
+    return [[1 for i in range(cols)] for j in range(rows)]
 
 class spectrum:
     def __init__(self):
@@ -269,17 +273,11 @@ if __name__ == '__main__':
     light_face = altGamma(face_image, 1.5)
     #rinbow pic
 
-    #rinbow_gradient = spectrum().rainbowRoad(face_image)
-    #cv2.imwrite("rainbow_test.jpg", rinbow_gradient)
-
     #generate window mask
     grad, intercept_L, intercept_R = genLines(face_image)
     row_points = borderPixels(face_image, grad, intercept_L, intercept_R)
     win_mask = genWindowMask(face_image, row_points, 50, 100)
     win_mask = medianFilter(win_mask, 9)
-
-    rinbow_window = rainbowGap(face_image, row_points)
-    #cv2.imwrite("rinbow_window.jpg", rinbow_window)
 
     #create sun mask
     sun_mask = genSunMask(face_image, 100)
@@ -288,13 +286,15 @@ if __name__ == '__main__':
     total_mask = combineMasks(sun_mask, win_mask)
     total_mask = np.array(total_mask)
 
-    #combine rainbow and light
-    ligh_rainbow = combineImages(light_face, rinbow_window, win_mask, 0.5)
-
     #combine them all
+    ######regular area##########
     output = combineImages(dark_face, light_face, total_mask, 1)
-    r_output = combineImages(dark_face, ligh_rainbow, sun_mask, 1)
+
+    ######rainbow area##########
+    light_plus_rainbow = combineImages(light_face, rainbowGap(light_face, row_points), allOnesMask(face_image), 0.5)
+    r_total_mask = combineMasks(sun_mask, genWindowMask(face_image, row_points, 50, 500))
+    r_output = combineImages(dark_face, light_plus_rainbow, r_total_mask, 1)
 
     #output to file
-    cv2.imwrite("test.jpg", output)
-    cv2.imwrite("r_test.jpg", r_output)
+    cv2.imwrite("light-cut.jpg", output)
+    cv2.imwrite("rinbow-cut.jpg", r_output)
