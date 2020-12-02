@@ -1,8 +1,7 @@
 import cv2
-import numpy as np
+
 import math
-import random
-import turtle
+
 
 natural_light = [253, 198, 243]
 
@@ -117,7 +116,10 @@ def rainbowGap(image, row_points):
         counter = 0
         for col_num in range(cols):
             if col_num >= row_points[row_num][1][1] and col_num <= row_points[row_num][0][1]:
-                canvas[row_num][col_num] = gradient[counter]
+                try:
+                    canvas[row_num][col_num] = gradient[counter]
+                except:
+                    canvas[row_num][col_num] = canvas[row_num][col_num]
                 counter += 1
             elif col_num > row_points[row_num][0][1]:
                 canvas[row_num][col_num] = gradient[-1]
@@ -263,7 +265,7 @@ class spectrum:
 
 if __name__ == '__main__':
     #open face image
-    face_image = cv2.imread("face1.jpg")
+    face_image = cv2.imread("teamdd.png")
     #colour image
     sun_wall = colourWall(face_image, natural_light)
 
@@ -284,7 +286,7 @@ if __name__ == '__main__':
 
     #combine masks
     total_mask = combineMasks(sun_mask, win_mask)
-    total_mask = np.array(total_mask)
+
 
     #combine them all
     ######regular area##########
@@ -292,9 +294,11 @@ if __name__ == '__main__':
 
     ######rainbow area##########
     light_plus_rainbow = combineImages(light_face, rainbowGap(light_face, row_points), allOnesMask(face_image), 0.5)
-    r_total_mask = combineMasks(sun_mask, genWindowMask(face_image, row_points, 50, 500))
+
+    r_total_mask = combineMasks(sun_mask, genWindowMask(face_image, row_points, 25, 25))
     r_output = combineImages(dark_face, light_plus_rainbow, r_total_mask, 1)
 
     #output to file
+    cv2.imwrite("light-plusrainbow.jpg", light_plus_rainbow)
     cv2.imwrite("light-cut.jpg", output)
     cv2.imwrite("rinbow-cut.jpg", r_output)

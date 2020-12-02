@@ -25,5 +25,13 @@ rainbow:
     will run though a function that will take an input of the length of pixels it has to go though the spectrum in
 
 2)
+    Convert the color image to grayscale.
+
+    Invert the grayscale image to get a negative.
+
+    Apply a Gaussian blur to the negative from step 2.
+
+    Blend the grayscale image from step 1 with the blurred negative from step 3 using a color dodge.
+
 3)
 4)
