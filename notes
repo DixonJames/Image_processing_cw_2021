@@ -25,13 +25,20 @@ rainbow:
     will run though a function that will take an input of the length of pixels it has to go though the spectrum in
 
 2)
-    Convert the color image to grayscale.
+    Implement a filter that applies a pencil/charcoal effect.
 
-    Invert the grayscale image to get a negative.
+    a) The effect should be applied on a greyscale
+version of the input images provided in DUO, using adjustable blending strength.
 
-    Apply a Gaussian blur to the negative from step 2.
+    b) Generate the effect
+by blending an input image with an appropriate custom-generated noise texture [15 marks] that has
+an appropriate motion blur effect applied to it [5 marks] to create pencil-stroke-like effects.
 
-    Blend the grayscale image from step 1 with the blurred negative from step 3 using a color dodge.
+    c) Develop a
+coloured pencil effect by applying the effect on two of the three RGB output channels [5 marks] (input
+image should remain greyscale, i.e., input RGB channels will hold identical information) and apply a
+different noise texture to each channel. Showcase your results by using the input images provided in
+DUO.
 
 3)
 4)
