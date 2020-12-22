@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="76713533-8429-4410-aae1-b21a32ef532b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Q3/Q3.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Q3/face1.jpg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Q3/Q3.py" beforeDir="false" afterPath="$PROJECT_DIR$/Q3/Q3.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Q3/test.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Q3/test.jpg" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -259,13 +260,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Q3/Q3.py</url>
-          <line>41</line>
+          <line>129</line>
           <option name="timeStamp" value="137" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Q3/Q3.py</url>
-          <line>99</line>
-          <option name="timeStamp" value="143" />
+          <line>28</line>
+          <option name="timeStamp" value="153" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
