@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="76713533-8429-4410-aae1-b21a32ef532b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Q3/face1.jpg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Q3/Q3.py" beforeDir="false" afterPath="$PROJECT_DIR$/Q3/Q3.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Q3/test.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Q3/test.jpg" afterDir="false" />
@@ -260,13 +259,33 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Q3/Q3.py</url>
-          <line>129</line>
+          <line>248</line>
           <option name="timeStamp" value="137" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Q3/Q3.py</url>
-          <line>28</line>
-          <option name="timeStamp" value="153" />
+          <line>141</line>
+          <option name="timeStamp" value="161" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Q3/Q3.py</url>
+          <line>90</line>
+          <option name="timeStamp" value="169" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Q3/Q3.py</url>
+          <line>74</line>
+          <option name="timeStamp" value="170" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Q3/Q3.py</url>
+          <line>81</line>
+          <option name="timeStamp" value="172" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Q3/Q3.py</url>
+          <line>88</line>
+          <option name="timeStamp" value="173" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

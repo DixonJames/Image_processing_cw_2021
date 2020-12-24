@@ -29,6 +29,121 @@ class ImageColourALt:
         self.HSV_output = convHsvBgr(cv2.merge([self.hue_channel, self.saturation_channel, self.value_channel]))
 
 
+class Blemish(ImageColourALt):
+
+    def detailRange(self, channel,l_cutoff = 0, h_cutoff = 1):
+        grad_x = cv2.convertScaleAbs(cv2.Sobel(channel,cv2.CV_16S, 1, 0, ksize=3, scale=1, delta=0, borderType=cv2.BORDER_DEFAULT))
+        grad_y = cv2.convertScaleAbs(cv2.Sobel(channel,cv2.CV_16S, 0, 1, ksize=3, scale=1, delta=0, borderType=cv2.BORDER_DEFAULT))
+        grad_x_y = cv2.addWeighted(grad_x, 0.5, grad_y, 0.5, 0)
+        canvas = channel.copy()
+
+        for row in range(len(grad_x)):
+            for col in range(len(grad_y)):
+                if grad_x_y[row][col] <= int(grad_x_y.max()) * h_cutoff and grad_x_y[row][col] >= int(grad_x_y.min()) * l_cutoff :
+                    canvas[row][col] = 255
+                else:
+                    canvas[row][col] = 0
+        return canvas
+
+    def removeBlmeish(self, channel, blemish_locations, mask):
+        if channel.all == self.hue_channel.all:
+            max_val = 179
+        else:
+            max_val = 255
+
+        image = channel / max_val
+        mask_canvas = np.zeros((len(mask[0]) - 1, len(mask[0]) - 1))
+        canvas = image.copy()
+
+        rows, cols = len(image), len(image[0])
+        top_left_shift = len(mask[0]) // 2
+
+        for row in range(rows - 1):
+            for col in range(cols - 1):
+                if blemish_locations[row][col] != 0:
+                    t_l_x = col - top_left_shift
+                    t_l_y = row - top_left_shift
+                    sum_valid = 0
+                    mask_canvas = np.zeros((len(mask[0]) , len(mask[0]) ))
+
+
+                    denominator = 0
+                    for mask_row in range(len(mask)):
+                        for mask_col in range(len(mask[0])):
+                            if mask[mask_col][mask_row] != 0:
+
+                                trial_p_x = t_l_x + mask_col
+                                trial_p_y = t_l_y + mask_row
+
+                                if trial_p_y >= 0 and trial_p_y < len(image) and trial_p_x >= 0 and trial_p_x < len(
+                                        image[0]) and blemish_locations[trial_p_y][trial_p_x] != 0:
+
+
+                                    sum_valid += image[trial_p_y][trial_p_x]
+
+
+                                    denominator += 1
+
+
+
+                    canvas[row][col] = min(max((sum_valid/denominator) * max_val,0),max_val)
+
+        return canvas.astype('uint8')
+
+class Smoothing(ImageColourALt):
+
+
+    def bilateralMean(self, channel, mask):
+        if channel.all == self.hue_channel.all:
+            max_val = 179
+        else:
+            max_val = 255
+        image = channel / max_val
+        mask_canvas = np.zeros((len(mask[0]) - 1, len(mask[0]) - 1))
+        canvas = image.copy()
+
+        rows, cols = len(image), len(image[0])
+        top_left_shift = len(mask[0]) // 2
+
+        noramlDis = lambda x, sigma: (math.e ** (-((x ** 2) / (2 * sigma ** 2)))) / (sigma * math.sqrt(2 * math.pi))
+
+
+        for row in range(rows - 1):
+            for col in range(cols - 1):
+                t_l_x = col - top_left_shift
+                t_l_y = row - top_left_shift
+                sum_valid = 0
+                mask_canvas = np.zeros((len(mask[0]) , len(mask[0]) ))
+
+
+                denominator = len(mask) * len(mask[0])
+                for mask_row in range(len(mask)):
+                    for mask_col in range(len(mask[0])):
+                        if mask[mask_col][mask_row] != 0:
+
+                            trial_p_x = t_l_x + mask_col
+                            trial_p_y = t_l_y + mask_row
+
+                            if trial_p_y >= 0 and trial_p_y < len(image) and trial_p_x >= 0 and trial_p_x < len(
+                                    image[0]):
+
+
+                                sum_valid += image[trial_p_y][trial_p_x]
+                                mask_canvas[mask_row][mask_col] = image[trial_p_y][trial_p_x]
+
+                                denominator -= abs(image[trial_p_y][trial_p_x] - image[row][col]) / max_val
+
+                mask_sum = 0
+                weighted_canvas = mask_canvas / (len(mask) * len(mask[0]))
+                for mask_row in range(len(weighted_canvas)):
+                    for mask_col in range(len(weighted_canvas[0])):
+                        mask_sum += weighted_canvas[mask_row][mask_col]
+
+                canvas[row][col] = min(max(mask_sum * max_val,0),max_val)
+                print(image[row][col]*max_val, min(max(mask_sum * max_val,0),max_val))
+        return canvas.astype('uint8')
+
+
 class EquationTranslation(ImageColourALt):
     def __init__(self, image):
         super().__init__(image)
@@ -198,16 +313,40 @@ def equilisingHSV():
     r_min, r_max, workspace.red_channel = workspace.boundPercentage(workspace.red_channel, 5, 5)
     equilised = workspace.equiliseChannel(workspace.normaliseChannel(workspace.saturation_channel, r_min, r_max))
 
+def clolourSquashing():
+    workspace.hue_channel = workspace.pixels_tr_func(workspace.hue_channel, workspace.logarithmic_trans, 20)
+
+    # workspace.saturation_channel = workspace.pixels_tr_func(workspace.saturation_channel, workspace.exponential_trans, 2)
+
+    # workspace.saturation_channel = workspace.pixels_tr_func(workspace.saturation_channel, workspace.exponential_trans, 2)
+
+def smoothRGB():
+    workspace = Smoothing(face_image)
+    meanMask = lambda side: [[1 / (side ** 2) for col in range(side)] for row in range(side)]
+
+    workspace.red_channel = workspace.bilateralMean(workspace.red_channel, meanMask(3), .5)
+    workspace.blue_channel = workspace.bilateralMean(workspace.blue_channel, meanMask(3), .5)
+    workspace.green_channel = workspace.bilateralMean(workspace.green_channel, meanMask(3), .5)
+
+def smoothBetweenLines():
+    workspace = Smoothing(face_image)
+    meanMask = lambda side: [[1 / (side ** 2) for col in range(side)] for row in range(side)]
+
+    workspace.hue_channel = workspace.bilateralMean(workspace.hue_channel, meanMask(3))
+
+
 if __name__ == '__main__':
     face_image = cv2.imread("face1.jpg")
 
-    workspace = EquationTranslation(face_image)
+    workspace = Blemish(face_image)
+    blemishes = workspace.detailRange(workspace.hue_channel, 0.1,0.1)
+    mask  = [[1 for i in range(5)]for j in range(5)]
 
-    workspace.saturation_channel = workspace.pixels_tr_func(workspace.saturation_channel, workspace.logarithmic_trans, 10)
+    workspace.hue_channel = workspace.removeBlmeish(workspace.hue_channel, blemishes, mask)
 
-    #workspace.saturation_channel = workspace.pixels_tr_func(workspace.saturation_channel, workspace.exponential_trans, 2)
 
-    #workspace.saturation_channel = workspace.pixels_tr_func(workspace.saturation_channel, workspace.exponential_trans, 2)
+
+
 
     workspace.merge()
 
