@@ -134,7 +134,7 @@ class polar:
         return canvas
 
     def nearestNeighborInterpolation(self, x, y, rows, cols):
-        return  self.image[max(0,min(round(x), rows - 1))][max(0, min(round(y), cols - 1))]
+        return self.image[max(0,min(round(x), rows - 1))][max(0, min(round(y), cols - 1))]
 
     def bilateralInterpolation(self, x, y, rows, cols):
         low_x = int(max(0, x // 1))
@@ -142,10 +142,10 @@ class polar:
         high_x = int(min(cols, low_x + 1))
         high_y = int(min(rows, low_y + 1))
 
-        t_r_col = self.HSVpalate[high_y][high_x]
-        t_l_col = self.HSVpalate[high_y][low_x]
-        b_r_col = self.HSVpalate[low_y][high_x]
-        b_l_col = self.HSVpalate[low_y][low_x]
+        t_r_col = self.HSVpalate[high_x][high_y]
+        t_l_col = self.HSVpalate[low_x][high_y]
+        b_r_col = self.HSVpalate[high_x][low_y]
+        b_l_col = self.HSVpalate[low_x][low_y]
 
         t_diff = [abs(int(t_l_col[0]) - int(t_r_col[0])), abs(int(t_l_col[1]) - int(t_r_col[1])), abs(int(t_l_col[2]) - int(t_r_col[2]))]
         b_diff = [abs(int(b_r_col[0]) - int(b_l_col[0])), abs(int(b_r_col[1]) - int(b_l_col[1])), abs(int(b_r_col[2]) - int(b_l_col[2]))]
@@ -165,15 +165,10 @@ class polar:
                        int(min(255, max(0, (topNbottom_diff[1] * (y - low_y)) + min(b_mid[1] ,t_mid[1])))),
                        int(min(255, max(0, (topNbottom_diff[2] * (y - low_y)) + min(b_mid[2] ,t_mid[2]))))]
 
-
-        if 255 in overall_mid:
-            print('s')
-
-
         tot_mean = np.uint8([[list(t_mid)]])
 
-        tot_mean = cv2.cvtColor(tot_mean, cv2.COLOR_HSV2BGR)[0][0]
 
+        tot_mean = cv2.cvtColor(tot_mean, cv2.COLOR_HSV2BGR)[0][0]
         return tot_mean
 
     def inverse_swirlForward(self, swirl_radius,angle,  interpolationALG):
