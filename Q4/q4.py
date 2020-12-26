@@ -42,6 +42,11 @@ class polar:
         offset_x = x - self.center_y
         return offset_x, offset_y
 
+    def removeCenterOffset(self, offset_x, offset_y):
+        y = offset_x + self.center_x
+        x = offset_y + self.center_y
+        return x, y
+
     def cartesianToPolar(self, x,y):
         #assumes that c-ords have already be normalised around new center
         theta = self.thetaFromOragin(x, y)
@@ -60,7 +65,7 @@ class polar:
         if radius == 0:
             return 0,0
 
-        if theta <= 2 * math.pi and theta > 3/2 * math.pi:
+        elif theta <= 2 * math.pi and theta > 3/2 * math.pi:
             y = -(radius * math.cos(theta - 3/2 * math.pi))
             x = (radius * math.sin(theta - 3/2 * math.pi))
 
@@ -76,12 +81,15 @@ class polar:
             x = radius * math.cos(theta)
             y = radius * math.sin(theta)
 
+        else:
+            print(radius,theta)
+
         return x,y
 
 
 
-    def imageToPolar(self):
-
+    def imageToPolarTocartensian(self):
+        # a nice sense check!
         rows, cols, dims = self.image.shape
         canvas  = np.array([[(0.0, 0.0) for _ in range(cols)] for i_ in range(rows)])
 
@@ -89,8 +97,9 @@ class polar:
             for columb_x in range(cols):
                 offset_x, offset_y =self.centerOffset(columb_x, row_y)
                 theta, radius = self.cartesianToPolar(offset_x, offset_y)
+                new_x, new_y = self.polarToCartesian(radius, theta)
 
-                canvas[row_y][columb_x] = (theta, radius)
+                canvas[row_y][columb_x] = (new_x, new_y)
         return canvas
 
     def swirlForward(self, swirl_radius):
@@ -103,8 +112,9 @@ class polar:
                 theta, radius = self.cartesianToPolar(offset_x, offset_y)
 
                 if radius <= swirl_radius:
-                        altered_theta = self.addAngle(theta, math.pi/2)
+                        altered_theta = self.addAngle(theta, abs(math.sin(radius/swirl_radius)) * math.pi)
                         alt_x, alt_y = self.polarToCartesian(radius, altered_theta)
+                        alt_x, alt_y = self.removeCenterOffset(alt_x, alt_y)
                         alt_x, alt_y = int(alt_x), int(alt_y)
                         canvas[row_y][columb_x] = self.image[alt_x][alt_y]
         return canvas
