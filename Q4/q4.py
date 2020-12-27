@@ -3,6 +3,37 @@ import cv2
 import numpy as np
 
 
+def absolute_differance(channel_A, channel_B):
+    ##for showing large differances
+    channel_A = channel_A.astype('int')
+    channel_B = channel_B.astype('int')
+    if channel_A.shape == channel_B.shape:
+        canvas  = channel_B.copy()
+        for r in range(len(channel_A)):
+            for c in range(len(channel_A[0])):
+                canvas[c][r] = abs(canvas[c][r] - channel_A[c][r])
+    return canvas.astype('uint8')
+
+def all_differance(channel_A, channel_B):
+    ##for showing large differances
+
+    if channel_A.shape == channel_B.shape:
+        canvas  = channel_B.copy()
+        for r in range(len(channel_A)):
+            for c in range(len(channel_A[0])):
+                canvas[c][r] = abs(canvas[c][r] - channel_A[c][r])
+    return canvas.astype('uint8')
+
+def subtractImages(imageA, imageB, diffreanceALG):
+    if imageA.shape == imageB.shape:
+        canvas = imageB.copy()
+        for d in range(imageA.shape[2]):
+            channelA,  channelB = imageA[:, :, d], imageB[:, :, d]
+            combchannel = diffreanceALG(channelA, channelB)
+            canvas[:, :, d] = combchannel
+        return canvas
+    return False
+
 class polar:
     def __init__(self, image):
         self.image = image
@@ -61,6 +92,7 @@ class polar:
             return 2 * math.pi
         if angleA + angleB - 2 * math.pi < 0:
             return angleA + angleB
+        return angleA + angleB - (2*math.pi)
 
     def subAngle(self, angleA, angleB):
         # result is A - B
@@ -73,7 +105,7 @@ class polar:
 
     def polarToCartesian(self, radius, theta):
         #need to work out for each quadrant
-        if theta> 2* math.pi:
+        if theta > 2* math.pi:
             theta = math.pi * 2
 
         if radius == 0:
@@ -95,8 +127,7 @@ class polar:
             x = radius * math.cos(theta)
             y = radius * math.sin(theta)
 
-        else:
-            print(radius,theta)
+
 
         return x,y
 
@@ -116,22 +147,7 @@ class polar:
                 canvas[row_y][columb_x] = (new_x, new_y)
         return canvas
 
-    def swirlForward(self, swirl_radius):
-        canvas = self.image.copy()
-        rows, cols, dims = self.image.shape
 
-        for row_y in range(rows-1):
-            for columb_x in range(cols-1):
-                offset_x, offset_y = self.centerOffset(columb_x, row_y)
-                theta, radius = self.cartesianToPolar(offset_x, offset_y)
-
-                if radius <= swirl_radius:
-                        altered_theta = self.addAngle(theta, (abs((swirl_radius-radius)/swirl_radius)) * math.pi)
-                        alt_x, alt_y = self.polarToCartesian(radius, altered_theta)
-                        alt_x, alt_y = self.removeCenterOffset(alt_x, alt_y)
-                        alt_x, alt_y = int(alt_x), int(alt_y)
-                        canvas[row_y][columb_x] = self.image[alt_x][alt_y]
-        return canvas
 
     def nearestNeighborInterpolation(self, x, y, rows, cols):
         return self.image[max(0,min(round(x), rows - 1))][max(0, min(round(y), cols - 1))]
@@ -171,6 +187,28 @@ class polar:
         tot_mean = cv2.cvtColor(tot_mean, cv2.COLOR_HSV2BGR)[0][0]
         return tot_mean
 
+    def inverse_swirlBackwards(self, swirl_radius, angle,  interpolationALG):
+
+        canvas = self.image.copy()
+        rows, cols, dims = self.image.shape
+
+        for row_y in range(rows - 1):
+            for columb_x in range(cols - 1):
+                offset_x, offset_y = self.centerOffset(columb_x, row_y)
+                theta, radius = self.cartesianToPolar(offset_x, offset_y)
+
+                if radius <= swirl_radius:
+                    altered_theta = self.addAngle(theta, (abs((swirl_radius - radius) / swirl_radius)) * angle)
+
+                    alt_x, alt_y = self.polarToCartesian(radius, altered_theta)
+                    alt_x, alt_y = self.removeCenterOffset(alt_x, alt_y)
+
+                    #nearest neighbor: round to the nearest value
+                    pixel_vals = interpolationALG(alt_x, alt_y, rows-1, cols-1)
+
+                    canvas[row_y][columb_x] = pixel_vals
+        return canvas
+
     def inverse_swirlForward(self, swirl_radius,angle,  interpolationALG):
 
         canvas = self.image.copy()
@@ -192,7 +230,6 @@ class polar:
 
                     canvas[row_y][columb_x] = pixel_vals
         return canvas
-
 
 
 class Fourier:
@@ -294,15 +331,30 @@ def faceswirl(image, radius, magantude):
     workspace = polar(image)
     swirl = workspace.inverse_swirlForward(radius, magantude, workspace.bilateralInterpolation)
 
-    cv2.imwrite("faceswirl.jpg", swirl)
+    return swirl
+
+def reverseFaceswirl(image, radius, magantude):
+    workspace = polar(image)
+    swirl = workspace.inverse_swirlBackwards(radius, magantude, workspace.bilateralInterpolation)
+
+    return swirl
+
+def fourierFilExample():
+    workspace = Fourier(face_image)
+
+    image = workspace.applyFilter(workspace.f_channel_A, workspace.filterSelection.gausLowpass(0.01))
 
 if __name__ == '__main__':
     face_image = cv2.imread("face1.jpg")
 
-    workspace = Fourier(face_image)
+    first = faceswirl(face_image, 100, math.pi/2)
+    damaged = reverseFaceswirl(first, 100, math.pi/2)
 
-    image = workspace.applyFilter(workspace.f_channel_A, workspace.filterSelection.gausLowpass(0.01))
-    cv2.imwrite("test.jpg", image)
+    differance_all = subtractImages(face_image, damaged, all_differance)
+    differance_large = subtractImages(face_image, damaged, absolute_differance)
+    cv2.imwrite("differance_all.jpg", differance_all)
+    cv2.imwrite("differance_large.jpg", differance_large)
+
 
 
 

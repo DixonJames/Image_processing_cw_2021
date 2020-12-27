@@ -4,6 +4,7 @@
     <list default="true" id="76713533-8429-4410-aae1-b21a32ef532b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Q4/q4.py" beforeDir="false" afterPath="$PROJECT_DIR$/Q4/q4.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Q4/test.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Q4/test.jpg" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -290,38 +291,38 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Q4/q4.py</url>
-          <line>98</line>
-          <option name="timeStamp" value="191" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Q4/q4.py</url>
-          <line>171</line>
-          <option name="timeStamp" value="207" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Q4/q4.py</url>
-          <line>224</line>
+          <line>261</line>
           <option name="timeStamp" value="212" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Q4/q4.py</url>
-          <line>223</line>
+          <line>260</line>
           <option name="timeStamp" value="213" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Q4/q4.py</url>
-          <line>216</line>
+          <line>253</line>
           <option name="timeStamp" value="214" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Q4/q4.py</url>
-          <line>217</line>
+          <line>254</line>
           <option name="timeStamp" value="215" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Q4/q4.py</url>
-          <line>219</line>
+          <line>256</line>
           <option name="timeStamp" value="216" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Q4/q4.py</url>
+          <line>108</line>
+          <option name="timeStamp" value="227" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Q4/q4.py</url>
+          <line>13</line>
+          <option name="timeStamp" value="230" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
