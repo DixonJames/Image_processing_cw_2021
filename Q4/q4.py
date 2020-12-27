@@ -195,19 +195,115 @@ class polar:
 
 
 
+class Fourier:
+    def __init__(self, image):
+        self.rows, self.cols, self.dims = image.shape
+        self.input_image = image
+
+        self.f_channel_A = self.fourierTrans(self.input_image[:, :, 0])
+        self.f_channel_B = self.fourierTrans(self.input_image[:, :, 1])
+        self.f_channel_C = self.fourierTrans(self.input_image[:, :, 2])
+
+        self.filterSelection = FourierFilter(self.rows, self.cols)
+
+    def fourierTrans(self, channel):
+        fourier = cv2.dft(channel.astype(np.float32), flags=cv2.DFT_COMPLEX_OUTPUT)
+        fourier_centered = np.fft.fftshift(fourier)
+        return fourier_centered[:, :, 0] * 1j + fourier_centered[:, :, 1]
+
+    def invFourierTrans(self, channel):
+        col_image = np.fft.ifft2(np.fft.fftshift(channel))
+
+        normalised_image = np.abs(col_image) - np.abs(col_image).min()
+        valid_col_image = (normalised_image * 255 / normalised_image.max()).astype('uint8')
+
+        return valid_col_image
+
+
+    def applyFilter(self, channel, filter):
+        altered = channel * filter
+        altered_norm_version = self.invFourierTrans(altered)
+
+        return altered_norm_version
+
+
+class FourierFilter:
+    def __init__(self, rows, cols):
+        self.rows = rows
+        self.cols = cols
+
+        self.center_x = self.cols//2
+        self.center_y = self.rows // 2
+
+    def centerOffset(self, x, y):
+        offset_y = y - self.center_x
+        offset_x = x - self.center_y
+        return offset_x, offset_y
+
+    def hardLowPass(self, radius):
+        filter = [[1 for x in range(self.rows)]for y in range(self.rows)]
+        for x in range(self.rows):
+            for y in range(self.cols):
+                off_x, off_y = self.centerOffset(x, y)
+                if math.sqrt(off_x**2 + off_y**2) <= radius:
+                    filter[y][x] = 0
+        return np.array(filter)
+
+    def hardHighPass(self, radius):
+        filter = [[0 for x in range(self.rows)] for y in range(self.rows)]
+        for x in range(self.rows):
+            for y in range(self.cols):
+                off_x, off_y = self.centerOffset(x, y)
+                if math.sqrt(off_x ** 2 + off_y ** 2) <= radius:
+                    filter[y][x] = 1
+        return np.array(filter)
+
+    def butterworthLow(self, radius, order):
+        filter = [[0 for x in range(self.rows)] for y in range(self.rows)]
+        for x in range(self.rows):
+            for y in range(self.cols):
+                off_x, off_y = self.centerOffset(x, y)
+                filter[y][x] = 1 / ((1 + ( (math.sqrt(off_x ** 2 + off_y ** 2))/ radius)) ** (2 * order))
+        return np.array(filter)
+
+    def butterworthHigh(self, radius, order):
+        filter = [[0 for x in range(self.rows)] for y in range(self.rows)]
+        for x in range(self.rows):
+            for y in range(self.cols):
+                off_x, off_y = self.centerOffset(x, y)
+                if (math.sqrt(off_x**2 + off_y**2)) != 0:
+                    filter[y][x] = 1/((1 + (radius/(math.sqrt(off_x**2 + off_y**2))))**(2*order))
+                else:
+                    filter[y][x] = 0
+        return np.array(filter)
+
+    def gausLowpass(self, sigma):
+        filter = [[0 for x in range(self.rows)] for y in range(self.rows)]
+        for x in range(self.rows):
+            for y in range(self.cols):
+                off_x, off_y = self.centerOffset(x, y)
+                if (math.sqrt(off_x**2 + off_y**2)) != 0:
+                    filter[y][x] = math.e**(-(off_x**2 + off_y**2)/2*sigma**2)
+                else:
+                    filter[y][x] = 1
+        return np.array(filter)
+
+
+
+def faceswirl(image, radius, magantude):
+    workspace = polar(image)
+    swirl = workspace.inverse_swirlForward(radius, magantude, workspace.bilateralInterpolation)
+
+    cv2.imwrite("faceswirl.jpg", swirl)
 
 if __name__ == '__main__':
     face_image = cv2.imread("face1.jpg")
 
-    workspace = polar(face_image)
-    swirl = workspace.inverse_swirlForward(100, math.pi,  workspace.bilateralInterpolation)
+    workspace = Fourier(face_image)
 
-    cv2.imwrite("bad_swirl_test.jpg", swirl)
-
-
+    image = workspace.applyFilter(workspace.f_channel_A, workspace.filterSelection.gausLowpass(0.01))
+    cv2.imwrite("test.jpg", image)
 
 
 
 
-
-    
