@@ -339,10 +339,21 @@ def reverseFaceswirl(image, radius, magantude):
 
     return swirl
 
-def fourierFilExample():
+def fourierFilterExample():
     workspace = Fourier(face_image)
 
     image = workspace.applyFilter(workspace.f_channel_A, workspace.filterSelection.gausLowpass(0.01))
+
+def swirlDammageExample():
+    face_image = cv2.imread("face1.jpg")
+
+    first = faceswirl(face_image, 100, math.pi / 2)
+    damaged = reverseFaceswirl(first, 100, math.pi / 2)
+
+    differance_all = subtractImages(face_image, damaged, all_differance)
+    differance_large = subtractImages(face_image, damaged, absolute_differance)
+    cv2.imwrite("differance_all.jpg", differance_all)
+    cv2.imwrite("differance_large.jpg", differance_large)
 
 if __name__ == '__main__':
     face_image = cv2.imread("face1.jpg")
