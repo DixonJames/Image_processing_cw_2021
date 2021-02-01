@@ -3,7 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="76713533-8429-4410-aae1-b21a32ef532b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Q4/q4.py" beforeDir="false" afterPath="$PROJECT_DIR$/Q4/q4.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Q2/Q2.py" beforeDir="false" afterPath="$PROJECT_DIR$/Q2/Q2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Q2/alt_motion_test.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Q2/alt_motion_test.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Q2/noise_test.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Q2/noise_test.jpg" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,7 +49,7 @@
       <recent name="C:\GIT\Data science\image processing\Image processing coursework" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.q4">
+  <component name="RunManager" selected="Python.Q2">
     <configuration name="Q2" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Image processing coursework" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -175,20 +177,20 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Python.Unnamed" />
       <item itemvalue="Python.Q2" />
       <item itemvalue="Python.Q3" />
-      <item itemvalue="Python.Unnamed" />
       <item itemvalue="Python.q4" />
       <item itemvalue="Python.testing (1)" />
       <item itemvalue="Python.testing" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.Q2" />
         <item itemvalue="Python.q4" />
         <item itemvalue="Python.testing (1)" />
         <item itemvalue="Python.Q3" />
         <item itemvalue="Python.testing" />
-        <item itemvalue="Python.Q2" />
       </list>
     </recent_temporary>
   </component>
@@ -227,11 +229,6 @@
           <url>file://$PROJECT_DIR$/Q1/Q1.py</url>
           <line>119</line>
           <option name="timeStamp" value="76" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Q2/Q2.py</url>
-          <line>109</line>
-          <option name="timeStamp" value="100" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Q2/testing.py</url>
@@ -322,6 +319,16 @@
           <url>file://$PROJECT_DIR$/Q4/q4.py</url>
           <line>13</line>
           <option name="timeStamp" value="230" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Q2/Q2.py</url>
+          <line>192</line>
+          <option name="timeStamp" value="244" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Q2/Q2.py</url>
+          <line>188</line>
+          <option name="timeStamp" value="245" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

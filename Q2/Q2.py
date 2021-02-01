@@ -68,10 +68,10 @@ class Laplacian:
 
                         if self.validatePoints(image, trial_p_x, trial_p_y) and mask[mask_row][mask_row] != 0:
                             sum_valid_mask += mask[mask_row][mask_col] * gaussian.normalDis(
-                                image[row][col] - image[trial_p_x][trial_p_y], 1) * gaussian.normalDis()
+                                image[row][col] - image[trial_p_x][trial_p_y], 1) * gaussian().normalDis()
 
                             sum_valid_maskXintensity += mask[mask_row][mask_col] * image[trial_p_y][
-                                trial_p_x] * gaussian.normalDis(image[row][col] - image[trial_p_x][trial_p_y], 1)
+                                trial_p_x] * gaussian().normalDis(image[row][col] - image[trial_p_x][trial_p_y], 1)
 
                 canvas[row][col] = int(round(sum_valid_maskXintensity / sum_valid_mask))
         return canvas
@@ -147,11 +147,14 @@ class gaussian:
                     int(image[row][col] * self.randomGaussianPixelChange(1 / intensity, 10)[0]))
         return canvas
 
-    def applyMaskBilatrealy(self, image, mask, prox_sig, intensity_sig):
-        image = image / 255
+    def applyMaskBilatrealy2(self, image, mask, prox_sig, intensity_sig):
+        #image = image / 255
         mask_canvas = np.zeros((len(mask[0]) - 1, len(mask[0]) - 1))
         canvas = image.copy()
         rows, cols = len(image), len(image[0])
+
+        b_avg = 0
+        a_avg = 0
 
         top_left_shift = len(mask[0]) // 2
 
@@ -163,6 +166,7 @@ class gaussian:
                 t_l_y = row - top_left_shift
 
                 sum_valid = 0
+                sum_valid_maskXintensity = 0
                 mask_canvas = np.zeros((len(mask[0]) - 1, len(mask[0]) - 1))
                 for mask_row in range(len(mask)):
                     for mask_col in range(len(mask[0])):
@@ -170,24 +174,22 @@ class gaussian:
                             trial_p_x = t_l_x + mask_col
                             trial_p_y = t_l_y + mask_row
 
-                            if trial_p_y >= 0 and trial_p_y < len(image) and trial_p_x >= 0 and trial_p_x < len(
-                                    image[0]):
-                                prox_const = self.normalDis(hype(abs(trial_p_x - col), abs(trial_p_y - row)),
-                                                                  prox_sig)
-                                intensity_const = self.normalDis(
-                                    abs(int(image[row][col]) - int(image[trial_p_y][trial_p_x])), intensity_sig)
+                            if self.validatePoints(image, trial_p_x, trial_p_y):
+                                prox_const = self.normalDis(self.hypotenusePythag(abs(trial_p_x - col), abs(trial_p_y - row)), prox_sig)/self.normalDis(0,prox_sig)
+                                intensity_const = self.normalDis(abs(int(image[row][col]) - int(image[trial_p_y][trial_p_x])), intensity_sig)/self.normalDis(0,intensity_sig)
 
                                 sum_valid += prox_const * intensity_const
-                                mask_canvas[mask_row][mask_col] = prox_const * intensity_const * image[trial_p_y][
-                                    trial_p_x]
+                                sum_valid_maskXintensity += prox_const * intensity_const * image[trial_p_y][trial_p_x]
+                                foundone = True
 
-                mask_sum = 0
-                weighted_canvas = mask_canvas / sum_valid
-                for mask_row in range(len(weighted_canvas)):
-                    for mask_col in range(len(weighted_canvas[0])):
-                        mask_sum += mask_canvas[mask_row][mask_col]
+                if foundone:
+                    print(canvas[row][col],int((sum_valid_maskXintensity / sum_valid)))
+                    b_avg += canvas[row][col]
+                    a_avg += int((sum_valid_maskXintensity / sum_valid))
+                    canvas[row][col] = int((sum_valid_maskXintensity / sum_valid))
 
-                canvas[row][col] = mask_sum * 255
+        avg_diff = (b_avg - a_avg)/ (rows * cols)
+
         return canvas
 
     def applyMask(self, image, mask):
@@ -204,59 +206,28 @@ class gaussian:
                 sum_valid_maskXintensity = 0
                 sum_valid_mask = 0
 
-                for mask_row in range(len(mask) - 1):
-                    for mask_col in range(len(mask[0]) - 1):
-                        trial_p_x = t_l_x + mask_col
-                        trial_p_y = t_l_y - mask_row
-
-                        if self.validatePoints(image, trial_p_x, trial_p_y) and mask[mask_row][mask_row] != 0:
-                            sum_valid_mask += mask[mask_row][mask_col] * gaussian.normalDis(
-                                image[row][col] - image[trial_p_x][trial_p_y], 1) * gaussian.normalDis()
-
-                            sum_valid_maskXintensity += mask[mask_row][mask_col] * image[trial_p_y][
-                                trial_p_x] * gaussian.normalDis(image[row][col] - image[trial_p_x][trial_p_y], 1)
-
-                canvas[row][col] = int(round(sum_valid_maskXintensity / sum_valid_mask))
-        return canvas
-
-    def applyMaskBilatrealy(self, image, mask, prox_sig, intensity_sig):
-        mask_canvas = mask.copy()
-        canvas = image.copy()
-        rows, cols = len(image), len(image[0])
-
-        top_left_shift = len(mask[0]) // 2
-
-        hype = lambda a,b: math.sqrt(a**2 + b**2)
-
-        for row in range(rows - 1):
-            for col in range(cols - 1):
-                t_l_x = col - top_left_shift
-                t_l_y = row + top_left_shift
-
-                sum_valid_maskXintensity = 0
-                sum_valid = 0
+                foundone = False
 
                 for mask_row in range(len(mask) - 1):
                     for mask_col in range(len(mask[0]) - 1):
                         trial_p_x = t_l_x + mask_col
                         trial_p_y = t_l_y - mask_row
 
-                        if self.validatePoints(image, trial_p_x, trial_p_y) and mask[mask_row][mask_row] != 0:
+                        if self.validatePoints(image, trial_p_x, trial_p_y) and (mask[mask_col][mask_row] != 0):
+                            sum_valid_mask += mask[mask_row][mask_col]
+                            sum_valid_maskXintensity += mask[mask_row][mask_col] * image[trial_p_y][trial_p_x]
+                            foundone = True
+                if foundone:
+                    try:
+                        canvas[row][col] = int((sum_valid_maskXintensity / sum_valid_mask))
+                    except:
+                        canvas[row][col] = 0
 
-                            mask_canvas[mask_row][mask_col] = mask[mask_row][mask_col] * gaussian.normalDis(
-                                abs(image[row][col] - image[trial_p_x][trial_p_y], intensity_sig)) * gaussian.normalDis(hype(abs(row-trial_p_y), abs(col - trial_p_x)), prox_sig) * image[row][col]
-
-
-                            sum_valid+= mask[mask_row][mask_col] * gaussian.normalDis(
-                                abs(image[row][col] - image[trial_p_x][trial_p_y], intensity_sig)) * gaussian.normalDis(hype(abs(row-trial_p_y), abs(col - trial_p_x)), prox_sig)
-
-                mask_canvas = mask_canvas * 1/sum_valid
-                total = 0
-                for mask_row in range(len(mask_canvas) - 1):
-                    for mask_col in range(len(mask_canvas[0]) - 1):
-                        total += mask_canvas[mask_row][mask_col]
-                canvas[row][col] = total
         return canvas
+
+
+
+
 
 
 class sketch:
@@ -303,8 +274,8 @@ if __name__ == '__main__':
 
     # sketch_test = merg().colourDodge(grey, blured_face,0.75)
 
-    noise_texture = gaussian().gaussianNoise(grey, 0.05)
-    motion_blured = gaussian().applyMask(noise_texture, motion().line(10))
+    noise_texture = gaussian().gaussianNoise(grey, 0.5)
+    motion_blured = gaussian().applyMaskBilatrealy2(noise_texture, motion().line(5),2,100)
 
     # sketch_test = cv2.divide(grey, 100-blured_face, scale=256)
     cv2.imwrite("noise_test.jpg", noise_texture)
