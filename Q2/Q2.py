@@ -41,6 +41,20 @@ class motion:
 
         return canvas
 
+    def quadEqn(self, x, base):
+        if x == 0:
+            return 0
+        return (1/base)*(x**(2))
+
+    def curve(self, size):
+        canvas = [[0 for i in range(size)] for j in range(size)]
+        for i in range(size):
+            canvas[int(self.quadEqn(i, size))][i] = 1
+
+        for row in canvas:
+            row.reverse()
+        return canvas
+
 class Laplacian:
     def __init__(self):
         self.filter = [[0, -1, 0],[-1, 4, -1],[[0, -1, 0]]]
@@ -164,7 +178,7 @@ class gaussian:
             for col in range(cols - 1):
                 t_l_x = col - top_left_shift
                 t_l_y = row - top_left_shift
-
+                foundone = False
                 sum_valid = 0
                 sum_valid_maskXintensity = 0
                 mask_canvas = np.zeros((len(mask[0]) - 1, len(mask[0]) - 1))
@@ -226,17 +240,36 @@ class gaussian:
         return canvas
 
 
+def invertGreyImage(image):
+    inverse = image.copy()
 
+    for row in range(len(image[0])):
+        for col in range(len(image[1])):
+            inverse[row][col] = 255 - image[row][col]
+    return inverse
+
+def mixImages(im1, im2, proportion):
+    mix = im1.copy()
+
+    for row in range(len(mix[0])):
+        for col in range(len(mix[1])):
+            mix[row][col] = proportion * im1[row][col] + (1 - proportion) * im2[row][col]
+    return mix
 
 
 
 class sketch:
     def __init__(self, image):
         self.original = image
-        self.rows, self.cols, self.dims = self.original.shape
+        try:
+            self.rows, self.cols, self.dims = self.original.shape
+        except:
+            self.rows, self.cols = self.original.shape
+            self.dims = 1
 
-        self.greyscale = self.greyscaleImage()
-        self.greyscale_flip = self.invertimage(self.greyscale)
+        if self.dims != 1:
+            self.greyscale = self.greyscaleImage()
+            self.greyscale_flip = self.invertimage()
 
     def pixToGrey(self, pixel):
         # order BGR
@@ -253,7 +286,7 @@ class sketch:
                 greyscale[row][col] = self.pixToGrey(self.original[row][col])
         return greyscale
 
-    def invertimage(self, image):
+    def invertimage(self):
         inverse = np.zeros((self.rows, self.cols), np.uint8)
 
         for row in range(self.rows):
@@ -262,7 +295,10 @@ class sketch:
         return inverse
 
 
+
+
 if __name__ == '__main__':
+    curve = motion().curve(10)
     face_image = cv2.imread("face1.jpg")
 
     drawing = sketch(face_image)
@@ -270,14 +306,20 @@ if __name__ == '__main__':
     grey = drawing.greyscale
     inv_grey = drawing.greyscale_flip
 
-    # blured_face = gaussian().applyMask(inv_grey, gaussian().gaussianMask(3, 1))
+    blured_face = gaussian().applyMask(inv_grey, gaussian().gaussianMask(3, 1))
 
-    # sketch_test = merg().colourDodge(grey, blured_face,0.75)
+    sketch_test = merg().colourDodge(grey, blured_face,0.75)
 
-    noise_texture = gaussian().gaussianNoise(grey, 0.5)
-    motion_blured = gaussian().applyMaskBilatrealy2(noise_texture, motion().line(5),2,100)
+    noise_texture = gaussian().gaussianNoise(sketch_test, 0.5)
+    motion_blured = gaussian().applyMaskBilatrealy2(noise_texture, motion().curve(10),2,100)
+    motion_blured = gaussian().applyMask(motion_blured, gaussian().gaussianMask(3, 1))
+    edges  = invertGreyImage(cv2.Laplacian(grey, cv2.CV_16S, ksize=3))
 
-    # sketch_test = cv2.divide(grey, 100-blured_face, scale=256)
-    cv2.imwrite("noise_test.jpg", noise_texture)
-    cv2.imwrite("alt_motion_test.jpg", motion_blured)
-    # cv2.imwrite("test_blur.jpg", blured_face)
+
+    cv2.imwrite("sketch.jpg", sketch_test)
+
+    nNs =  mixImages(motion_blured, edges, 0.98)
+    #cv2.imwrite("noisAndEdges.jpg", nNs)
+    final_mix = mixImages(nNs, grey, 0.6)
+    cv2.imwrite("final.jpg", final_mix)
+
