@@ -4,8 +4,6 @@
     <list default="true" id="76713533-8429-4410-aae1-b21a32ef532b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Q2/Q2.py" beforeDir="false" afterPath="$PROJECT_DIR$/Q2/Q2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Q2/alt_motion_test.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Q2/alt_motion_test.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Q2/noise_test.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Q2/noise_test.jpg" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -322,8 +320,8 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Q2/Q2.py</url>
-          <line>256</line>
-          <option name="timeStamp" value="247" />
+          <line>265</line>
+          <option name="timeStamp" value="249" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

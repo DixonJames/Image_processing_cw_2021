@@ -46,10 +46,16 @@ class motion:
             return 0
         return (1/base)*(x**(2))
 
-    def curve(self, size):
+    def curve(self, size, thickness):
         canvas = [[0 for i in range(size)] for j in range(size)]
         for i in range(size):
             canvas[int(self.quadEqn(i, size))][i] = 1
+
+            for j in range(thickness):
+                if int(self.quadEqn(i, size)) + j < len(canvas) and int(self.quadEqn(i, size)) + j > 0:
+                    canvas[int(self.quadEqn(i, size)) + j][i] = 1
+                if int(self.quadEqn(i, size)) - j > len(canvas) and int(self.quadEqn(i, size)) - j > 0:
+                    canvas[int(self.quadEqn(i, size)) + j][i] = 1
 
         for row in canvas:
             row.reverse()
@@ -197,7 +203,7 @@ class gaussian:
                                 foundone = True
 
                 if foundone:
-                    print(canvas[row][col],int((sum_valid_maskXintensity / sum_valid)))
+                    #print(canvas[row][col],int((sum_valid_maskXintensity / sum_valid)))
                     b_avg += canvas[row][col]
                     a_avg += int((sum_valid_maskXintensity / sum_valid))
                     canvas[row][col] = int((sum_valid_maskXintensity / sum_valid))
@@ -256,7 +262,21 @@ def mixImages(im1, im2, proportion):
             mix[row][col] = proportion * im1[row][col] + (1 - proportion) * im2[row][col]
     return mix
 
+def combinelayers(l1, l2):
+    blank_image_bg = np.zeros(shape=[len(l1), len(l1), 3], dtype=np.uint8)
+    blank_image_bg[:, :, 0] = l1
+    blank_image_bg[:, :, 1] = l2
 
+    blank_image_br = np.zeros(shape=[len(l1), len(l1), 3], dtype=np.uint8)
+    blank_image_br[:, :, 0] = l1
+    blank_image_br[:, :, 2] = l2
+
+    blank_image_gr = np.zeros(shape=[len(l1), len(l1), 3], dtype=np.uint8)
+    blank_image_gr[:, :, 1] = l1
+    blank_image_gr[:, :, 2] = l2
+
+
+    return blank_image_bg, blank_image_br, blank_image_gr
 
 class sketch:
     def __init__(self, image):
@@ -295,11 +315,9 @@ class sketch:
         return inverse
 
 
-
-
-if __name__ == '__main__':
-    curve = motion().curve(10)
-    face_image = cv2.imread("face1.jpg")
+def greySketch(image, old_P, line_P, line_len, line_thinckness):
+    #a = motion().curve(line_len, line_thinckness)
+    face_image = image
 
     drawing = sketch(face_image)
 
@@ -308,18 +326,41 @@ if __name__ == '__main__':
 
     blured_face = gaussian().applyMask(inv_grey, gaussian().gaussianMask(3, 1))
 
-    sketch_test = merg().colourDodge(grey, blured_face,0.75)
+    sketch_test = merg().colourDodge(grey, blured_face, 0.75)
 
     noise_texture = gaussian().gaussianNoise(sketch_test, 0.5)
-    motion_blured = gaussian().applyMaskBilatrealy2(noise_texture, motion().curve(10),2,100)
+    motion_blured = gaussian().applyMaskBilatrealy2(noise_texture, motion().curve(line_len, line_thinckness), 2, 100)
     motion_blured = gaussian().applyMask(motion_blured, gaussian().gaussianMask(3, 1))
-    edges  = invertGreyImage(cv2.Laplacian(grey, cv2.CV_16S, ksize=3))
+    edges = invertGreyImage(cv2.Laplacian(grey, cv2.CV_16S, ksize=3))
+
+    #cv2.imwrite("sketch.jpg", sketch_test)
+
+    nNs = mixImages(motion_blured, edges, (1-line_P))
+    # cv2.imwrite("noisAndEdges.jpg", nNs)
+    final_mix = mixImages(nNs, grey, (1-old_P))
 
 
-    cv2.imwrite("sketch.jpg", sketch_test)
+    cv2.imwrite("monochromeSketch_RG.jpg", final_mix)
+    return final_mix
 
-    nNs =  mixImages(motion_blured, edges, 0.98)
-    #cv2.imwrite("noisAndEdges.jpg", nNs)
-    final_mix = mixImages(nNs, grey, 0.6)
-    cv2.imwrite("final.jpg", final_mix)
+
+def colourSketch(image, old_P, line_P, line_len, line_thinckness, col_option):
+
+
+    layerA = greySketch(image, old_P, line_P, line_len, line_thinckness)
+    layerB = greySketch(image, old_P, line_P, line_len, line_thinckness)
+
+    final_mix_a, final_mix_b, final_mix_c = combinelayers(layerA, layerB)
+
+    if col_option == 1 or col_option == 0:
+        cv2.imwrite("colouredSketch_BG.jpg", final_mix_a)
+    if col_option == 2 or col_option == 0:
+        cv2.imwrite("colouredSketch_BR.jpg", final_mix_b)
+    if col_option == 3 or col_option == 0:
+        cv2.imwrite("colouredSketch_RG.jpg", final_mix_c)
+
+if __name__ == '__main__':
+    face_image = cv2.imread("face1.jpg")
+
+    colourSketch(face_image, 0.4, 0.05, 10, 2, 0)
 
