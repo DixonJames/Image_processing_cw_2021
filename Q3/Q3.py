@@ -37,13 +37,18 @@ class Blemish(ImageColourALt):
         grad_x_y = cv2.addWeighted(grad_x, 0.5, grad_y, 0.5, 0)
         canvas = channel.copy()
 
+        top_diff = (grad_x_y.max() - (int(grad_x_y.max()) * h_cutoff))
+        bottom_diff = int(grad_x_y.max()) * l_cutoff
+
         for row in range(len(grad_x)):
             for col in range(len(grad_y)):
-                if grad_x_y[row][col] <= int(grad_x_y.max()) * h_cutoff and grad_x_y[row][col] >= int(grad_x_y.min()) * l_cutoff :
+                if grad_x_y[row][col] <= top_diff and grad_x_y[row][col] >= bottom_diff:
                     canvas[row][col] = 255
                 else:
                     canvas[row][col] = 0
         return canvas
+
+
 
     def removeBlmeish(self, channel, blemish_locations, mask):
         if channel.all == self.hue_channel.all:
@@ -51,7 +56,7 @@ class Blemish(ImageColourALt):
         else:
             max_val = 255
 
-        image = channel / max_val
+        image = channel
         mask_canvas = np.zeros((len(mask[0]) - 1, len(mask[0]) - 1))
         canvas = image.copy()
 
@@ -60,24 +65,24 @@ class Blemish(ImageColourALt):
 
         for row in range(rows - 1):
             for col in range(cols - 1):
-                if blemish_locations[row][col] != 0:
+                if blemish_locations[row][col] == 255:
                     t_l_x = col - top_left_shift
                     t_l_y = row - top_left_shift
                     sum_valid = 0
                     mask_canvas = np.zeros((len(mask[0]) , len(mask[0]) ))
 
-
+                    tot = 0
                     denominator = 0
                     for mask_row in range(len(mask)):
                         for mask_col in range(len(mask[0])):
-                            if mask[mask_col][mask_row] != 0:
+                            if mask[mask_col][mask_row] == 1:
 
                                 trial_p_x = t_l_x + mask_col
                                 trial_p_y = t_l_y + mask_row
 
                                 if trial_p_y >= 0 and trial_p_y < len(image) and trial_p_x >= 0 and trial_p_x < len(
-                                        image[0]) and blemish_locations[trial_p_y][trial_p_x] != 0:
-
+                                        image[0]) and blemish_locations[trial_p_y][trial_p_x] == 0:
+                                    #and blemish_locations[trial_p_y][trial_p_x] == 0
 
                                     sum_valid += image[trial_p_y][trial_p_x]
 
@@ -85,10 +90,15 @@ class Blemish(ImageColourALt):
                                     denominator += 1
 
 
+                    if denominator != 0:
+                        if int(canvas[row][col]) != int(sum_valid/denominator):
+                            #print(canvas[row][col] , int(sum_valid / denominator))
+                            canvas[row][col] = int(sum_valid / denominator)
 
-                    canvas[row][col] = min(max((sum_valid/denominator) * max_val,0),max_val)
+                    else:
+                        canvas[row][col] = channel[row][col]
 
-        return canvas.astype('uint8')
+        return canvas
 
 class Smoothing(ImageColourALt):
 
@@ -144,6 +154,58 @@ class Smoothing(ImageColourALt):
         return canvas.astype('uint8')
 
 
+    def normalDis(self, x, sigma):
+        return (math.e**(-((x**2)/(2*sigma**2))))/(sigma*math.sqrt(2*math.pi))
+
+    def hypotenusePythag(self, sideA, sideB):
+        return math.sqrt((sideA ** 2) + (sideB ** 2))
+
+    def applyMaskBilatrealy(self, image, mask, prox_sig, intensity_sig):
+        #image = image / 255
+        mask_canvas = np.zeros((len(mask[0]) - 1, len(mask[0]) - 1))
+        canvas = image.copy()
+        rows, cols = len(image), len(image[0])
+
+        b_avg = 0
+        a_avg = 0
+
+        top_left_shift = len(mask[0]) // 2
+
+        hype = lambda a, b: math.sqrt(a ** 2 + b ** 2)
+
+        for row in range(rows - 1):
+            for col in range(cols - 1):
+                t_l_x = col - top_left_shift
+                t_l_y = row - top_left_shift
+                foundone = False
+                sum_valid = 0
+                sum_valid_maskXintensity = 0
+                mask_canvas = np.zeros((len(mask[0]) - 1, len(mask[0]) - 1))
+                for mask_row in range(len(mask)):
+                    for mask_col in range(len(mask[0])):
+                        if mask[mask_col][mask_row] != 0:
+                            trial_p_x = t_l_x + mask_col
+                            trial_p_y = t_l_y + mask_row
+
+                            if trial_p_y >= 0 and trial_p_y < len(image) and trial_p_x >= 0 and trial_p_x < len(
+                                    image[0]):
+                                prox_const = self.normalDis(self.hypotenusePythag(abs(trial_p_x - col), abs(trial_p_y - row)), prox_sig)/self.normalDis(0,prox_sig)
+                                intensity_const = self.normalDis(abs(int(image[row][col]) - int(image[trial_p_y][trial_p_x])), intensity_sig)/self.normalDis(0,intensity_sig)
+
+                                sum_valid += prox_const * intensity_const
+                                sum_valid_maskXintensity += prox_const * intensity_const * image[trial_p_y][trial_p_x]
+                                foundone = True
+
+                if foundone:
+                    #print(canvas[row][col],int((sum_valid_maskXintensity / sum_valid)))
+                    b_avg += canvas[row][col]
+                    a_avg += int((sum_valid_maskXintensity / sum_valid))
+                    canvas[row][col] = int((sum_valid_maskXintensity / sum_valid))
+
+        avg_diff = (b_avg - a_avg)/ (rows * cols)
+
+        return canvas
+
 class EquationTranslation(ImageColourALt):
     def __init__(self, image):
         super().__init__(image)
@@ -155,17 +217,24 @@ class EquationTranslation(ImageColourALt):
          increased the dynamic range of the dark part of the
          image and decreased the dynamic range in bright part.
         '''
-        pixel = min((math.log10(1 + ((math.e ** sigma) - 1) * pixel)), max_val)
+        pixel = min((max_val/ (math.log10(1 + ((math.e ** sigma) - 1) * 255)))*(math.log10(1 + ((math.e ** sigma) - 1) * pixel)), max_val)
 
         return int(pixel)
 
     def exponential_trans(self, pixel, alpha, max_val):
+        '''
+        increased the dynamic range of the light part of the
+        image and increase the dynamic range in bright part.
+        '''
 
         pixel = min((((1 + alpha) ** (pixel/ max_val) - 1) * max_val), max_val)
+        try:
+            res =  int(pixel)
+        except:
+            print("s")
+        return res
 
-        return int(pixel)
-
-    def pixels_tr_func(self, channel, function, func_peram):
+    def pixels_tr_func(self, channel, function, func_peram, threshhold = None):
 
         if channel.all == self.hue_channel.all:
             max_val = 179
@@ -173,7 +242,20 @@ class EquationTranslation(ImageColourALt):
             max_val = 255
 
         vec_func = np.vectorize(function)
-        res = [vec_func(row, func_peram, max_val) for row in channel]
+
+        if threshhold == None:
+            res = [vec_func(row, func_peram, max_val) for row in channel]
+        else:
+            canvas = channel.copy()
+            for row in range(len(channel)):
+                for pixel in range(len(canvas[row])):
+                    if threshhold < 0:
+                        if canvas[row][pixel] <= -(threshhold):
+                            canvas[row][pixel] = function(canvas[row][pixel], func_peram, max_val)
+                    if threshhold > 0:
+                        if canvas[row][pixel] >= threshhold:
+                            canvas[row][pixel] = function(canvas[row][pixel], func_peram, max_val)
+            res = canvas
 
         largest = 0
         for row in res:
@@ -186,7 +268,6 @@ class EquationTranslation(ImageColourALt):
         res = (np.array(res) * r).astype('uint8')
 
         return res
-
 
 class Histogram(ImageColourALt):
     def __init__(self, image):
@@ -234,17 +315,21 @@ class Histogram(ImageColourALt):
     def normaliseChannel(self, channel, min_p_val, max_p_val):
         x,y= channel.shape
         canvas = channel.copy()
+
         if channel.all == self.hue_channel.all:
             high_lim = 179
         else:
             high_lim = 255
+
         low_lim = 0
 
         lookuptable = {}
         for row in range(y):
             for col in range(x):
                 if channel[row][col] not in lookuptable.keys():
-                    lookuptable[channel[row][col]] = round((channel[row][col] - max_p_val)*((high_lim-low_lim)/(max_p_val-min_p_val)) + high_lim)
+                    lookuptable[channel[row][col]] = round((((channel[row][col] - max_p_val)*((high_lim-low_lim)/(max_p_val-min_p_val)) )+ high_lim))
+                    if lookuptable[channel[row][col]] == 0:
+                        lookuptable[channel[row][col]] = lookuptable[channel[row][col]]
                 canvas[row][col] = lookuptable[channel[row][col]]
         return canvas
 
@@ -273,6 +358,7 @@ class Histogram(ImageColourALt):
         rolling_tot = 0
         low_p_val_bound = 0
         high_p_val_bound = 255
+
         for val_count_i in range(len(count)):
 
             rolling_tot += count[val_count_i]
@@ -294,11 +380,10 @@ class Histogram(ImageColourALt):
 
 
 
-
-
-def normalisingHSV():
+def normalisingHSV(image):
     # r_min, r_max, workspace.hue_channel = workspace.boundPercentage(workspace.hue_channel, 10, 10)
     # workspace.hue_channel = workspace.normaliseChannel(workspace.hue_channel, r_min, r_max)
+    workspace = Histogram(image)
 
     r_min, r_max, workspace.saturation_channel = workspace.boundPercentage(workspace.saturation_channel, 5, 5)
     workspace.saturation_channel = workspace.normaliseChannel(workspace.saturation_channel, r_min, r_max)
@@ -307,54 +392,141 @@ def normalisingHSV():
     workspace.value_channel = workspace.normaliseChannel(workspace.value_channel, r_min, r_max)
     workspace.merge()
 
-def equilisingHSV():
+def equilisingHSV(face_image):
     workspace = Histogram(face_image)
 
-    r_min, r_max, workspace.red_channel = workspace.boundPercentage(workspace.red_channel, 5, 5)
-    equilised = workspace.equiliseChannel(workspace.normaliseChannel(workspace.saturation_channel, r_min, r_max))
+    channel = workspace.value_channel
 
-def clolourSquashing():
-    workspace.hue_channel = workspace.pixels_tr_func(workspace.hue_channel, workspace.logarithmic_trans, 20)
+    #goes though the channel and sets the top and bottom percent pixels as the max and min of these two groups respectively
+    r_min, r_max, bounded = workspace.boundPercentage(channel, 5, 5)
 
-    # workspace.saturation_channel = workspace.pixels_tr_func(workspace.saturation_channel, workspace.exponential_trans, 2)
+    #workspace.value_channel = workspace.equiliseChannel(workspace.normaliseChannel(bounded, r_min, r_max))
+    #make sure that vals below threasholds have previously been remved by workspace.boundPercentage
+    workspace.value_channel = workspace.normaliseChannel(bounded, r_min, r_max)
 
-    # workspace.saturation_channel = workspace.pixels_tr_func(workspace.saturation_channel, workspace.exponential_trans, 2)
+    workspace.merge()
 
-def smoothRGB():
-    workspace = Smoothing(face_image)
+    return workspace.HSV_output
+
+
+def enhanceDark(image, theashhold_val, alpha_val = 3):
+    workspace = EquationTranslation(image)
+
+    if theashhold_val < 0:
+        if image.all == workspace.hue_channel.all:
+            theashhold_val = -(179 - (179 * theashhold_val * -1))
+        else:
+            theashhold_val = -(255 - (255 * theashhold_val * -1))
+
+    if theashhold_val > 0:
+        if image.all == workspace.hue_channel.all:
+            theashhold_val = (179 * theashhold_val)
+        else:
+            theashhold_val = (255 * theashhold_val)
+
+    if theashhold_val == 0:
+        theashhold_val = None
+
+
+    workspace.value_channel = workspace.pixels_tr_func(workspace.value_channel, workspace.exponential_trans, alpha_val, theashhold_val)
+
+    workspace.merge()
+    return workspace.HSV_output
+
+def enhanceLight(image, theashhold_val, alpha_val = 3):
+    workspace = EquationTranslation(image)
+
+    if theashhold_val < 0:
+        if image.all == workspace.hue_channel.all:
+            theashhold_val = -(179 - (179 * theashhold_val * -1))
+        else:
+            theashhold_val = -(255 - (255 * theashhold_val * -1))
+
+    if theashhold_val > 0:
+        if image.all == workspace.hue_channel.all:
+            theashhold_val = (179 * theashhold_val)
+        else:
+            theashhold_val = (255 * theashhold_val)
+
+    if theashhold_val == 0:
+        theashhold_val = None
+
+
+    workspace.value_channel = workspace.pixels_tr_func(workspace.value_channel, workspace.logarithmic_trans, alpha_val, theashhold_val)
+
+    workspace.merge()
+    return workspace.HSV_output
+
+def warmSkin(image, alpha_val = 3):
+    workspace = EquationTranslation(image)
+    workspace.saturation_channel = workspace.pixels_tr_func(workspace.saturation_channel, workspace.exponential_trans, alpha_val)
+
+    workspace.merge()
+    return workspace.HSV_output
+
+def Shrek_filter(image, alpha_val = 20):
+    workspace = EquationTranslation(image)
+    workspace.hue_channel = workspace.pixels_tr_func(workspace.hue_channel, workspace.exponential_trans, alpha_val)
+
+    workspace.merge()
+    return workspace.HSV_output
+
+
+def smoothRGB(face_image,mask_s,  prox, intensity):
+    workspace = ImageColourALt(face_image)
+    affect = Smoothing(workspace.RGB_output)
     meanMask = lambda side: [[1 / (side ** 2) for col in range(side)] for row in range(side)]
 
-    workspace.red_channel = workspace.bilateralMean(workspace.red_channel, meanMask(3), .5)
-    workspace.blue_channel = workspace.bilateralMean(workspace.blue_channel, meanMask(3), .5)
-    workspace.green_channel = workspace.bilateralMean(workspace.green_channel, meanMask(3), .5)
+    workspace.red_channel = affect.applyMaskBilatrealy(workspace.red_channel, meanMask(mask_s), prox, intensity)
+    workspace.blue_channel = affect.applyMaskBilatrealy(workspace.blue_channel, meanMask(mask_s), prox, intensity)
+    workspace.green_channel = affect.applyMaskBilatrealy(workspace.green_channel, meanMask(mask_s), prox, intensity)
 
-def smoothBetweenLines():
-    workspace = Smoothing(face_image)
-    meanMask = lambda side: [[1 / (side ** 2) for col in range(side)] for row in range(side)]
+    workspace.merge()
+    return workspace.RGB_output
 
-    workspace.hue_channel = workspace.bilateralMean(workspace.hue_channel, meanMask(3))
 
+def removeBlemish(image):
+
+    workspace = Blemish(image)
+    channel = workspace.value_channel
+    blemishes = workspace.detailRange(channel, 0.295, 0.6)
+
+    mask = [[1 for i in range(10)] for j in range(10)]
+    workspace.value_channel = workspace.removeBlmeish(channel, blemishes, mask)
+
+    workspace.merge()
+    return workspace.HSV_output
 
 if __name__ == '__main__':
     face_image = cv2.imread("face1.jpg")
 
-    workspace = Blemish(face_image)
-    blemishes = workspace.detailRange(workspace.hue_channel, 0.1,0.1)
-    mask  = [[1 for i in range(5)]for j in range(5)]
-
-    workspace.hue_channel = workspace.removeBlmeish(workspace.hue_channel, blemishes, mask)
+    edge_sharpness = 50
+    bluryness = 3
 
 
 
 
 
-    workspace.merge()
+
+    #first equalise the extreams
+    img = equilisingHSV(face_image)
+
+
+    #remove blemished
+    img  =  removeBlemish(img)
+
+    #remove sharp bits from removing blemish
+    img = smoothRGB(img, bluryness, 2, edge_sharpness)
+    
+    ##enhances darkest hair
+    img = enhanceDark(img, -0.9, 3)
+    ##warms up skin
+    img = warmSkin(img)
 
 
 
+    cv2.imwrite("HSVequalise.jpg", img)
 
-
-    cv2.imwrite("test.jpg", workspace.HSV_output)
 
 
 

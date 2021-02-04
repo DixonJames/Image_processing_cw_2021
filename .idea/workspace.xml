@@ -3,7 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="76713533-8429-4410-aae1-b21a32ef532b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Q2/Q2.py" beforeDir="false" afterPath="$PROJECT_DIR$/Q2/Q2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Q3/Q3.py" beforeDir="false" afterPath="$PROJECT_DIR$/Q3/Q3.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Q3/test.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Q3/test.jpg" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,7 +48,7 @@
       <recent name="C:\GIT\Data science\image processing\Image processing coursework" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.Q2">
+  <component name="RunManager" selected="Python.Q3">
     <configuration name="Q2" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Image processing coursework" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -184,10 +185,10 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.Q3" />
         <item itemvalue="Python.Q2" />
         <item itemvalue="Python.q4" />
         <item itemvalue="Python.testing (1)" />
-        <item itemvalue="Python.Q3" />
         <item itemvalue="Python.testing" />
       </list>
     </recent_temporary>
@@ -255,33 +256,8 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Q3/Q3.py</url>
-          <line>248</line>
-          <option name="timeStamp" value="137" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Q3/Q3.py</url>
-          <line>141</line>
+          <line>151</line>
           <option name="timeStamp" value="161" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Q3/Q3.py</url>
-          <line>90</line>
-          <option name="timeStamp" value="169" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Q3/Q3.py</url>
-          <line>74</line>
-          <option name="timeStamp" value="170" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Q3/Q3.py</url>
-          <line>81</line>
-          <option name="timeStamp" value="172" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Q3/Q3.py</url>
-          <line>88</line>
-          <option name="timeStamp" value="173" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Q4/q4.py</url>
@@ -322,6 +298,31 @@
           <url>file://$PROJECT_DIR$/Q2/Q2.py</url>
           <line>265</line>
           <option name="timeStamp" value="249" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Q3/Q3.py</url>
+          <line>48</line>
+          <option name="timeStamp" value="279" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Q3/Q3.py</url>
+          <line>219</line>
+          <option name="timeStamp" value="299" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Q3/Q3.py</url>
+          <line>233</line>
+          <option name="timeStamp" value="301" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Q3/Q3.py</url>
+          <line>454</line>
+          <option name="timeStamp" value="302" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Q3/Q3.py</url>
+          <line>331</line>
+          <option name="timeStamp" value="305" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
