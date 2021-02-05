@@ -3,8 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="76713533-8429-4410-aae1-b21a32ef532b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Q3/Q3.py" beforeDir="false" afterPath="$PROJECT_DIR$/Q3/Q3.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Q3/test.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Q3/test.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Q1/Q1.py" beforeDir="false" afterPath="$PROJECT_DIR$/Q1/Q1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Q1/light-cut.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Q1/light-cut.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Q1/light-plusrainbow.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Q1/light-plusrainbow.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Q1/rinbow-cut.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Q1/rinbow-cut.jpg" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,7 +50,28 @@
       <recent name="C:\GIT\Data science\image processing\Image processing coursework" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.Q3">
+  <component name="RunManager" selected="Python.Q1">
+    <configuration name="Q1" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Image processing coursework" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Q1" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Q1/Q1.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="Q2" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Image processing coursework" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -154,42 +177,21 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="testing" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="Image processing coursework" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Q2" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Q2/testing.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <list>
       <item itemvalue="Python.Unnamed" />
       <item itemvalue="Python.Q2" />
       <item itemvalue="Python.Q3" />
       <item itemvalue="Python.q4" />
       <item itemvalue="Python.testing (1)" />
-      <item itemvalue="Python.testing" />
+      <item itemvalue="Python.Q1" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.Q1" />
         <item itemvalue="Python.Q3" />
         <item itemvalue="Python.Q2" />
         <item itemvalue="Python.q4" />
         <item itemvalue="Python.testing (1)" />
-        <item itemvalue="Python.testing" />
       </list>
     </recent_temporary>
   </component>
@@ -219,16 +221,6 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Q1/Q1.py</url>
-          <line>186</line>
-          <option name="timeStamp" value="74" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Q1/Q1.py</url>
-          <line>119</line>
-          <option name="timeStamp" value="76" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Q2/testing.py</url>
           <line>65</line>
@@ -323,6 +315,11 @@
           <url>file://$PROJECT_DIR$/Q3/Q3.py</url>
           <line>331</line>
           <option name="timeStamp" value="305" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Q1/Q1.py</url>
+          <line>110</line>
+          <option name="timeStamp" value="314" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

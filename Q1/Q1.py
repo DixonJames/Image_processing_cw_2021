@@ -1,5 +1,5 @@
 import cv2
-
+import numpy
 import math
 
 
@@ -86,25 +86,31 @@ def genWindowMask(image, row_points, blur_size, blur_drop):
     for row_num in range(rows):
         for collumb_num in range(cols):
 
-            if row_points[row_num][1][1] <= collumb_num  and collumb_num <= row_points[row_num][0][1]:
+            if row_points[row_num][1][1] < collumb_num  and collumb_num < row_points[row_num][0][1]:
                 mask[row_num][collumb_num] = 1
 
+            else:
                 if blur_size != 0 and blur_drop != 0:
                     if collumb_num == row_points[row_num][0][1]:
+
                         for i in range(len(dropoff)-1):
                             try:
                                 mask[row_num][collumb_num + i] = dropoff[i]
+
                             except:
                                 continue
-
-                    elif collumb_num == row_points[row_num][1][1]:
+                    #
+                    elif collumb_num == row_points[row_num][1][1] :
                         for i in range(len(dropoff)-1):
                             try:
                                 mask[row_num][collumb_num - i] = dropoff[i]
                             except:
                                 continue
+
     #mask = np.array(mask)
-    return mask
+    return cv2.GaussianBlur(numpy.array(mask),(9,9),0)
+
+
 
 def rainbowGap(image, row_points):
     canvas = image.copy()
@@ -265,7 +271,7 @@ class spectrum:
 
 if __name__ == '__main__':
     #open face image
-    face_image = cv2.imread("teamdd.png")
+    face_image = cv2.imread("face1.jpg")
     #colour image
     sun_wall = colourWall(face_image, natural_light)
 
@@ -293,7 +299,7 @@ if __name__ == '__main__':
     output = combineImages(dark_face, light_face, total_mask, 1)
 
     ######rainbow area##########
-    light_plus_rainbow = combineImages(light_face, rainbowGap(light_face, row_points), allOnesMask(face_image), 0.5)
+    light_plus_rainbow = cv2.GaussianBlur(combineImages(light_face, rainbowGap(light_face, row_points), allOnesMask(face_image), 0.5),(5,5),0)
 
     r_total_mask = combineMasks(sun_mask, genWindowMask(face_image, row_points, 25, 25))
     r_output = combineImages(dark_face, light_plus_rainbow, r_total_mask, 1)
