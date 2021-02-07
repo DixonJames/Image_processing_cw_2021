@@ -525,7 +525,8 @@ if __name__ == '__main__':
 
 
 
-    cv2.imwrite("HSVequalise.jpg", img)
+    cv2.imwrite("final.jpg", Shrek_filter(img))
+
 
 
 

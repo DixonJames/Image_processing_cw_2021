@@ -1,0 +1,101 @@
+Inside the python file there is a function called main at the bottom of the code. 
+In main there are each of my 4 functions with the inputs I have used which you can edit. Simply comment out each function one at a time to run. The image to be changed should be in the same folder as the python file. The output of the functions will be written to the disk in the same location as the python file.
+
+
+
+EXAMPLE COMMANDS:
+#Q1
+light_Rainbow_leak('face1.jpg', 0.3,1,0)
+#Q2
+PENCIL_CHARCOALEFFECT('face1.jpg', blending_coefficient = 0.4, stroke_strength = 0.5, stroke_width = 2, mode = 0)
+#Q3
+DurhamTinderProfilePicture_BEAUTIFYING_FILTER("face1.jpg", smoothing= 3, edge_sharpness = 50, dark_enhance = 3)
+#Q4
+swirl_face('face1.jpg', 180, 100, apply_low= False, low_type= 2)
+
+
+
+
+BREAKDOWN OF PERAMITERS FOR EACH FUNCTION:
+I have provided the inputs I have used for each and an explanation of each is provided blow:
+
+
+#####################Q1#####################
+light_Rainbow_leak(image_name, darkening_coefficient, blending_coefficient, mode)
+
+image_name: the name of the image (in the same folder as the python file) to be converted.
+darkening_coefficient: co-efficient effecting the darkness of the image that is not part of the light leak
+blending_coefficient: co-efficient effecting strength of light leak/ rainbow leak
+mode: 0 selects light leak, 1 selects the rainbow leak
+
+
+here is an example for some sensible inputs for a 400X400 image:
+light_Rainbow_leak('face1.jpg', 0.3,1,0)
+
+output file images will be called:
+light-cut.jpg
+Or 
+rainbow-cut.jpg
+ Depending on input arguments
+ 
+ 
+ #####################Q2#####################
+PENCIL_CHARCOALEFFECT(image_name, blending_coefficient = 0.4, stroke_strength = 0.5, stroke_width = 2, mode = 0)
+
+image_name: the name of the image (in the same folder as the python file) to be converted.
+blending_coefficient : ratio for how much of original image comes out in final sketch
+ stroke_strength: how harsh the gaussian noise (and therefore sketch marks) can be 
+stroke_width = how many pixels thick each pencil stroke is
+mode = 0 indicates a greyscale sketch, 1 indicates outputting colour sketches
+
+here is an example for some sensible inputs for a 400X400 image:
+PENCIL_CHARCOALEFFECT('face1.jpg', blending_coefficient = 0.4, stroke_strength = 0.5, stroke_width = 2, mode = 0)
+
+output file images will be called:
+monochromeSketch_RG.jpg
+Or 
+colourSketch_BG.jpg & colourSketch_BR.jpg
+& colourSketch_RG.jpg
+
+ Depending on input arguments
+ 
+ 
+#####################Q3#####################
+DurhamTinderProfilePicture_BEAUTIFYING_FILTER(imageName, smoothing = 3, edge_sharpness = 50, dark_enhance = 3)
+
+
+imageName = : the name of the image (in the same folder as the python file) to be converted.
+smoothing = size of mask to take average pixel from for smoothing 
+edge_sharpness = changes how much edges of the image are blurred in the bilateral filter (the smaller the sharper) 
+dark_enhance = changes the alpha value of equation translation of spreading out the dark values
+
+here is an example for some sensible inputs for a 400X400 image:
+DurhamTinderProfilePicture_BEAUTIFYING_FILTER("face1.jpg", smoothing= 3, edge_sharpness = 50, dark_enhance = 3)
+
+output file images will be called:
+{name}_Beautified.jpg
+
+
+#####################Q4#####################
+swirl_face(imagename, angle, radius, apply_low = False, low_type = 2):
+
+imagename: the name of the image (in the same folder as the python file) to be converted.
+Angle: input in degrees (I.e., up to 360)
+Radius: radius of the swirl transformation. keep this within half the dimensions of the input image 
+apply_low: set this to true if you want to apply low pass filtering to the image prior to the swirl
+low_type = the type of low pass filtering (if apply_low selected!). [1 = gaussian low pass, 2 = Butterworth low pass, 3 = regular low pass]
+
+here is an example for some sensible inputs for a 400X400 image:
+swirl_face('face1.jpg', 180, 100, apply_low= False, low_type= 2)
+
+output file images will be called:
+{name}Swirl.jpg
+Or 
+{name}Swirl_LowPass.jpg
+ Depending on input arguments
+
+
+
+
+
+

@@ -278,12 +278,12 @@ class FourierFilter:
         return offset_x, offset_y
 
     def hardLowPass(self, radius):
-        filter = [[1 for x in range(self.rows)]for y in range(self.rows)]
+        filter = [[0 for x in range(self.rows)]for y in range(self.rows)]
         for x in range(self.rows):
             for y in range(self.cols):
                 off_x, off_y = self.centerOffset(x, y)
                 if math.sqrt(off_x**2 + off_y**2) <= radius:
-                    filter[y][x] = 0
+                    filter[y][x] = 1
         return np.array(filter)
 
     def hardHighPass(self, radius):
@@ -327,44 +327,97 @@ class FourierFilter:
 
 
 
-def faceswirl(image, radius, magantude):
+def forwardFaceswirl_biLin(image, radius, magantude):
     workspace = polar(image)
     swirl = workspace.inverse_swirlForward(radius, magantude, workspace.bilateralInterpolation)
 
     return swirl
 
-def reverseFaceswirl(image, radius, magantude):
+def forwardFaceswirl_nearestNeighbor(image, radius, magantude):
+    workspace = polar(image)
+    swirl = workspace.inverse_swirlForward(radius, magantude, workspace.nearestNeighborInterpolation)
+
+    return swirl
+
+def reverseFaceswirl_biLin(image, radius, magantude):
     workspace = polar(image)
     swirl = workspace.inverse_swirlBackwards(radius, magantude, workspace.bilateralInterpolation)
 
     return swirl
 
-def fourierFilterExample():
+def reverseFaceswirl_nearestNeighbor(image, radius, magantude):
+    workspace = polar(image)
+    swirl = workspace.inverse_swirlBackwards(radius, magantude, workspace.nearestNeighborInterpolation)
+
+    return swirl
+
+
+
+
+def fourierFilterExample(face_image):
     workspace = Fourier(face_image)
 
-    image = workspace.applyFilter(workspace.f_channel_A, workspace.filterSelection.gausLowpass(0.01))
+    """
+    workspace.f_channel_A = workspace.applyFilter(workspace.f_channel_A, workspace.filterSelection.gausLowpass(0.01))
+    workspace.f_channel_B = workspace.applyFilter(workspace.f_channel_B, workspace.filterSelection.gausLowpass(0.01))
+    workspace.f_channel_C = workspace.applyFilter(workspace.f_channel_C, workspace.filterSelection.gausLowpass(0.01))
+    """
 
-def swirlDammageExample():
-    face_image = cv2.imread("face1.jpg")
+    """
+    workspace.f_channel_A = workspace.applyFilter(workspace.f_channel_A, workspace.filterSelection.butterworthLow(50, 0.5))
+    workspace.f_channel_B = workspace.applyFilter(workspace.f_channel_B, workspace.filterSelection.butterworthLow(50, 0.5))
+    workspace.f_channel_C = workspace.applyFilter(workspace.f_channel_C, workspace.filterSelection.butterworthLow(50, 0.5))
+    """
 
-    first = faceswirl(face_image, 100, math.pi / 2)
-    damaged = reverseFaceswirl(first, 100, math.pi / 2)
+    workspace.f_channel_A = workspace.applyFilter(workspace.f_channel_A,workspace.filterSelection.hardLowPass(50))
+    workspace.f_channel_B = workspace.applyFilter(workspace.f_channel_B,workspace.filterSelection.hardLowPass(50))
+    workspace.f_channel_C = workspace.applyFilter(workspace.f_channel_C,workspace.filterSelection.hardLowPass(50))
+
+
+    face_image[:, :, 0] = workspace.f_channel_A
+    face_image[:, :, 1] = workspace.f_channel_B
+    face_image[:, :, 2] = workspace.f_channel_C
+
+
+    return face_image
+
+def swirlDammageExample(face_image, filename):
+
+
+    first = forwardFaceswirl_nearestNeighbor(face_image, 100, math.pi / 2)
+    damaged = reverseFaceswirl_nearestNeighbor(first, 100, math.pi / 2)
 
     differance_all = subtractImages(face_image, damaged, all_differance)
     differance_large = subtractImages(face_image, damaged, absolute_differance)
-    cv2.imwrite("differance_all.jpg", differance_all)
-    cv2.imwrite("differance_large.jpg", differance_large)
+    cv2.imwrite(f"{filename}_differanceNN_all.jpg", differance_all)
+    cv2.imwrite(f"{filename}_differanceNN_large.jpg", differance_large)
+
+def trasformallbits(face_image):
+    forward_BI = forwardFaceswirl_biLin(face_image, 100, math.pi / 2)
+    forward_NN = forwardFaceswirl_nearestNeighbor(face_image, 100, math.pi / 2)
+
+    reversed_BI = reverseFaceswirl_biLin(face_image, 100, math.pi / 2)
+    reversed_NN = reverseFaceswirl_nearestNeighbor(face_image, 100, math.pi / 2)
+
+    cv2.imwrite("forward_BI.jpg", forward_BI)
+    cv2.imwrite("forward_NN.jpg", forward_NN)
+    cv2.imwrite("reversed_BI.jpg", reversed_BI)
+    cv2.imwrite("reversed_NN.jpg", reversed_NN)
 
 if __name__ == '__main__':
     face_image = cv2.imread("face1.jpg")
 
-    first = faceswirl(face_image, 100, math.pi/2)
-    damaged = reverseFaceswirl(first, 100, math.pi/2)
 
-    differance_all = subtractImages(face_image, damaged, all_differance)
-    differance_large = subtractImages(face_image, damaged, absolute_differance)
-    cv2.imwrite("differance_all.jpg", differance_all)
-    cv2.imwrite("differance_large.jpg", differance_large)
+
+    without_low_pass = reverseFaceswirl_biLin(face_image, 100, math.pi/2)
+    with_low_pass = reverseFaceswirl_biLin(fourierFilterExample(face_image), 100, math.pi / 2)
+
+    swirlDammageExample(face_image, "none_")
+
+    #cv2.imwrite("with_low_pass_hard.jpg", with_low_pass)
+    #cv2.imwrite("without_low_pass.jpg", without_low_pass)
+
+
 
 
 

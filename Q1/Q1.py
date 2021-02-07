@@ -308,3 +308,7 @@ if __name__ == '__main__':
     cv2.imwrite("light-plusrainbow.jpg", light_plus_rainbow)
     cv2.imwrite("light-cut.jpg", output)
     cv2.imwrite("rinbow-cut.jpg", r_output)
+
+    cv2.imwrite("sun.jpg", numpy.array(total_mask)*255)
+    cv2.imwrite("window.jpg", numpy.array(win_mask)*255)
+

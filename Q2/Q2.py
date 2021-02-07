@@ -4,7 +4,7 @@ import math
 import random
 
 
-def boundPixVal(val):
+def boundPixVal_2(val):
     return max(0, min(255, val))
 
 
@@ -24,7 +24,7 @@ class merg:
                     if ratio < 0:
                         print(ratio)
                     else:
-                        canvas[row][col] = boundPixVal(imageA[row][col] * ratio)
+                        canvas[row][col] = boundPixVal_2(imageA[row][col] * ratio)
 
         return canvas
 
@@ -163,7 +163,7 @@ class gaussian:
 
         for row in range(rows - 1):
             for col in range(cols - 1):
-                canvas[row][col] = boundPixVal(
+                canvas[row][col] = boundPixVal_2(
                     int(image[row][col] * self.randomGaussianPixelChange(1 / intensity, 10)[0]))
         return canvas
 
@@ -329,6 +329,7 @@ def greySketch(image, old_P, line_P, line_len, line_thinckness):
     sketch_test = merg().colourDodge(grey, blured_face, 0.75)
 
     noise_texture = gaussian().gaussianNoise(sketch_test, 0.5)
+
     motion_blured = gaussian().applyMaskBilatrealy2(noise_texture, motion().curve(line_len, line_thinckness), 2, 100)
     motion_blured = gaussian().applyMask(motion_blured, gaussian().gaussianMask(3, 1))
     edges = invertGreyImage(cv2.Laplacian(grey, cv2.CV_16S, ksize=3))
@@ -341,6 +342,7 @@ def greySketch(image, old_P, line_P, line_len, line_thinckness):
 
 
     cv2.imwrite("monochromeSketch_RG.jpg", final_mix)
+
     return final_mix
 
 
@@ -362,5 +364,6 @@ def colourSketch(image, old_P, line_P, line_len, line_thinckness, col_option):
 if __name__ == '__main__':
     face_image = cv2.imread("face1.jpg")
 
-    colourSketch(face_image, 0.4, 0.05, 10, 2, 0)
+    #colourSketch(face_image, 0.4, 0.05, 10, 2, 0)
+    greySketch(face_image, 0.4, 0.05, 10, 2)
 
